@@ -13,6 +13,8 @@
 | **Automatización** | Google Apps Script | Triggers, procesamiento y categorización |
 | **BI / Dashboard** | Looker Studio | Visualización (5 páginas) |
 | **Frontend Web** | HTML/CSS/JS + Apps Script Web App | Análisis cualitativo de respuestas abiertas |
+| **Landing Page** | Apps Script Web App | Portal centralizado para conectar encuestas y dashboard |
+| **Gestión** | Google Docs/Sheets | Registro de actas de revisión (fecha, participantes, conclusión) |
 
 ---
 
@@ -207,12 +209,29 @@ La interfaz web mostrará y permitirá revisar **todas las respuestas abiertas**
 
 ---
 
-### 📚 FASE 5 — Documentación y Cierre (Semana 7)
+### 🚀 FASE 5 — Landing Page y Actas de Revisión (Semana 6-7)
+**8 Abr – 14 Abr**
+
+**1. Landing Page Centralizada**
+Desarrollo de un porrtal web único usando Google Apps Script que sirva como punto de acceso unificado.
+- **Funciones:** Botones de acceso directo a las 4 encuestas, al Dashboard de Looker Studio y a la Interfaz de Análisis Cualitativo.
+- **Diseño:** Interfaz limpia, responsive y corporativa alineada a Fundación Chile.
+
+**2. Sistema de Actas de Revisión**
+Creación de un espacio estructurado para documentar el seguimiento del proyecto.
+- **Formato:** Registro de "Fecha", "Participantes" y "Conclusión de la revisión".
+- **Implementación:** Hoja dedicada en el Google Sheets principal o carpeta de Google Docs vinculada a la Landing Page.
+
+**Entregable:** Landing page publicada y sistema de registro de actas activo.
+
+---
+
+### 📚 FASE 6 — Documentación y Cierre (Semana 7)
 **15 Abr – 21 Abr**
 
 | Documento | Contenido |
 |---|---|
-| Documentación técnica | Estructura Sheets, scripts, triggers, instrucciones de mantenimiento |
+| Documentación técnica | Estructura Sheets, scripts, triggers, instrucciones de mantenimiento, Landing Page |
 | Manual de usuario | Guía para el equipo Fundación Chile |
 | Video tutorial | Grabación 5–10 min del sistema completo |
 | Sesión de traspaso | Reunión de cierre con el cliente |
@@ -239,6 +258,8 @@ La interfaz web mostrará y permitirá revisar **todas las respuestas abiertas**
 - [ ] Formulario 4: Docentes EMTP — 11 secciones (S3)
 - [ ] Dashboard Looker Studio — 5 páginas 🔴 *Hito 50%* (S3–S5)
 - [ ] Interfaz web de análisis cualitativo (~18 preguntas abiertas) (S5–S6)
+- [ ] Landing Page centralizadora en Apps Script (S6-S7)
+- [ ] Espacio de Actas de Revisión configurado (S6-S7)
 - [ ] Documentación técnica + Manual de usuario (S7)
 
 ---
