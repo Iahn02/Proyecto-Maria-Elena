@@ -75,8 +75,9 @@ function configurarEgresadosPractica(sheet) {
     "Relacion_Formacion_Practica", "Conocimientos_Mas_Utiles_Abierta", "Conocimientos_Faltantes_Abierta",
     // C. Calidad Enseñanza
     "Claridad_Explicaciones", "Equilibrio_Teoria_Practica", "Actualizacion_Contenidos", "Metodologias_Enseñanza", "Sistemas_Evaluacion", "Metodos_Mas_Efectivos",
-    // D. Competencias Técnicas
-    "Comp_Tecnica_1", "Comp_Tecnica_2", "Comp_Tecnica_3", "Comp_Tecnica_4", "Comp_Tecnica_5",
+    // D. Competencias Técnicas (Mecánica y Química separadas por bifurcación)
+    "Comp_Tecnica_Mecanica_1", "Comp_Tecnica_Mecanica_2", "Comp_Tecnica_Mecanica_3", "Comp_Tecnica_Mecanica_4", "Comp_Tecnica_Mecanica_5",
+    "Comp_Tecnica_Quimica_1", "Comp_Tecnica_Quimica_2", "Comp_Tecnica_Quimica_3", "Comp_Tecnica_Quimica_4", "Comp_Tecnica_Quimica_5",
     // E. Competencias Transversales
     "Trabajo_Equipo", "Comunicacion_Efectiva", "Resolucion_Problemas", "Iniciativa_Autonomia", "Liderazgo",
     // F. Competencias Digitales
@@ -135,8 +136,9 @@ function configurarEmpresas(sheet) {
     "Nombre_Empresa", "Sector_Productivo", "Tamanio_Empresa", "Cargo_Responde", "Num_Practicantes_2Anios", "Especialidades_Recibidas",
     // B. Pertinencia
     "Nivel_Alineacion", "Fortalezas_Observadas_Abierta", "Debilidades_Observadas_Abierta",
-    // C. Competencias Técnicas
-    "Comp_Tecnica_1", "Comp_Tecnica_2", "Comp_Tecnica_3", "Comp_Tecnica_4", "Comp_Tecnica_5",
+    // C. Competencias Técnicas (Mecánica y Química separadas por bifurcación)
+    "Comp_Tecnica_Mecanica_1", "Comp_Tecnica_Mecanica_2", "Comp_Tecnica_Mecanica_3", "Comp_Tecnica_Mecanica_4", "Comp_Tecnica_Mecanica_5",
+    "Comp_Tecnica_Quimica_1", "Comp_Tecnica_Quimica_2", "Comp_Tecnica_Quimica_3", "Comp_Tecnica_Quimica_4", "Comp_Tecnica_Quimica_5",
     // C. Competencias Transversales
     "Trabajo_Equipo", "Comunicacion_Efectiva", "Resolucion_Problemas", "Iniciativa_Autonomia", "Adaptabilidad_Cambio", "Puntualidad_Responsabilidad",
     // D. Competencias Digitales

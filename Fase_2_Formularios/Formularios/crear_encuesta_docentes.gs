@@ -167,26 +167,105 @@ function crearFormularioDocentes() {
   form.addParagraphTextItem().setTitle('18. ¿Qué estrategias pedagógicas considera eficaces para el desarrollo de competencias transversales y habilidades del siglo XXI en contextos técnico-profesionales?');
 
   // ***************************************************************
-  // SECCIÓN G, H, I, J, K (Resumen para demostración)
+  // SECCIÓN G: COMPETENCIAS DIGITALES DOCENTES
   // ***************************************************************
-  form.addPageBreakItem().setTitle('SECCIONES G A K: GESTIÓN, INFRAESTRUCTURA E INSERCIÓN LABORAL');
-  
-  // Aca se agregan el resto de los items (se insertan como placeholder para avanzar ágilmente)
+  form.addPageBreakItem().setTitle('SECCIÓN G: COMPETENCIAS DIGITALES PROPIAS');
+
   form.addGridItem()
-      .setTitle('19. Evalúe de 1 a 5 la calidad y disponibilidad de los siguientes recursos para su enseñanza:')
+      .setTitle('19. Evalúe su nivel de dominio y aplicación en las siguientes dimensiones de sus Competencias Digitales Docentes:')
       .setRows([
-        'Equipamiento de talleres y laboratorios',
-        'Materiales e insumos para actividades prácticas',
-        'Conectividad y software especializado',
-        'Espacios físicos en general'
+        'Uso de software e instrumental digital específico de su especialidad',
+        'Manejo de herramientas ofimáticas (Word, Excel, nubes, etc.)',
+        'Búsqueda y gestión de información digital y fuentes confiables',
+        'Comunicación digital y trabajo colaborativo online',
+        'Seguridad de la información y ciudadanía digital',
+        'Creación y adaptación de contenidos digitales para sus clases'
+      ])
+      .setColumns(['1 (Incipiente)', '2 (Básico)', '3 (Intermedio)', '4 (Avanzado)', '5 (Experto)'])
+      .setRequired(true);
+
+  form.addMultipleChoiceItem()
+      .setTitle('20. ¿Ha recibido capacitación reciente sobre el uso de Tecnologías de la Información (TIC) en los últimos 2 años?')
+      .setChoiceValues(['Sí, brindada por el liceo', 'Sí, por cuenta propia', 'No he recibido capacitación'])
+      .setRequired(true);
+
+  form.addParagraphTextItem()
+      .setTitle('21. ¿Qué equipamiento o tecnologías (software/hardware) son prioritarias de incorporar urgentemente para impartir mejor su módulo?');
+
+  // ***************************************************************
+  // SECCIÓN H: INSERCIÓN LABORAL (VISIÓN DOCENTE)
+  // ***************************************************************
+  form.addPageBreakItem().setTitle('SECCIÓN H: INSERCIÓN LABORAL Y SEGUIMIENTO SECTORIAL');
+
+  form.addMultipleChoiceItem()
+      .setTitle('22. ¿Realiza usted algún tipo de seguimiento a los titulados o estudiantes en práctica que formó?')
+      .setChoiceValues([
+        'Sí, de manera sistemática y estructurada',
+        'Sí, de manera informal (contacto por RRSS o WhatsApp)',
+        'Rara vez, solo me entero por terceros',
+        'No, no hago seguimiento'
+      ])
+      .setRequired(true);
+
+  form.addTextItem()
+      .setTitle('23. Basado en su experiencia, estime qué porcentaje (%) aproximado de sus estudiantes logra insertarse laboralmente con éxito en su área técnica en su primer año de egreso:')
+      .setRequired(true);
+
+  form.addParagraphTextItem()
+      .setTitle('24. ¿Qué acciones adicionales sugiere implementar para mejorar los niveles de empleabilidad efectiva e inserción laboral de sus egresados?');
+
+  // ***************************************************************
+  // SECCIÓN I: ORIENTACIÓN VOCACIONAL
+  // ***************************************************************
+  form.addPageBreakItem().setTitle('SECCIÓN I: ORIENTACIÓN VOCACIONAL Y APOYO AL ESTUDIANTE');
+
+  form.addMultipleChoiceItem()
+      .setTitle('25. ¿Cuál es su grado de participación en el proceso de Orientación Vocacional de los estudiantes de su especialidad?')
+      .setChoiceValues(['Participación Alta (Soy profesor guía/Jefe de Especialidad)', 'Participación Media', 'Participación Baja', 'Nula participación'])
+      .setRequired(true);
+
+  form.addParagraphTextItem()
+      .setTitle('26. ¿Qué estrategias utiliza cuando detecta dificultades severas de aprendizaje en estudiantes de cuarto medio orientados a procesos prácticos?');
+
+  form.addParagraphTextItem()
+      .setTitle('27. Frente al inicio de las prácticas profesionales, ¿Qué tipo de apoyo o preparación adicional cree que los estudiantes requieren reforzar desde el liceo?');
+
+  // ***************************************************************
+  // SECCIÓN J: INFRAESTRUCTURA
+  // ***************************************************************
+  form.addPageBreakItem().setTitle('SECCIÓN J: INFRAESTRUCTURA Y RECURSOS DIDÁCTICOS');
+
+  form.addGridItem()
+      .setTitle('28. Evalúe de 1 a 5 la calidad y disponibilidad de los siguientes recursos para su enseñanza:')
+      .setRows([
+        'Estado de equipamiento en talleres y laboratorios',
+        'Disponibilidad de herramientas y maquinarias vigentes',
+        'Disposición de materiales fungibles e insumos de práctica',
+        'Calidad de recursos de la biblioteca o centro de recursos',
+        'Conectividad de red e implementación de tecnología en salas'
       ])
       .setColumns(['1 (Muy deficiente)', '2 (Deficiente)', '3 (Regular)', '4 (Bueno)', '5 (Excelente)'])
       .setRequired(true);
       
-  form.addScaleItem()
-      .setTitle('20. ¿Cómo evalúa el apoyo institucional y de la gestión directiva hacia su labor docente?')
-      .setBounds(1, 5)
-      .setLabels('Muy insatisfecho', 'Muy satisfecho')
+  form.addParagraphTextItem()
+      .setTitle('29. Si pudiera priorizar la adquisición o mejora de un (1) recurso en concreto para su módulo técnico, ¿Cuál sería y por qué?');
+
+  // ***************************************************************
+  // SECCIÓN K: GESTIÓN INSTITUCIONAL
+  // ***************************************************************
+  form.addPageBreakItem().setTitle('SECCIÓN K: GESTIÓN INSTITUCIONAL Y APOYO DIRECTIVO');
+
+  form.addGridItem()
+      .setTitle('30. Evalúe su nivel de satisfacción con los siguientes procesos de gestión institucional de 1 a 5:')
+      .setRows([
+        'Claridad, apoyo y liderazgo del equipo directivo/UTP',
+        'Apoyo en la asignación de recursos materiales para sus clases',
+        'Gestión en tiempos idóneos de requerimientos administrativos',
+        'Resguardo de los tiempos no lectivos (planificación y evaluación)',
+        'Calidad de los canales de comunicación interna (docentes/directivos)',
+        'Sistemas de perfeccionamiento y formación continua docente'
+      ])
+      .setColumns(['1 (Muy insatisfecho)', '2 (Insatisfecho)', '3 (Neutral)', '4 (Satisfecho)', '5 (Muy Satisfecho)'])
       .setRequired(true);
 
   Logger.log('¡Formulario Docentes creado con éxito!');
