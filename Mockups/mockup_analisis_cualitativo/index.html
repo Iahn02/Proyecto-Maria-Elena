@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Cualitativo — Respuestas Abiertas · Liceo María Elena</title>
+    <meta name="description" content="Interfaz web de análisis cualitativo de respuestas abiertas del Sistema de Seguimiento de Egresados EMTP, Liceo María Elena. Construida con Google Apps Script.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ====== GAS TOP BAR ====== -->
+    <header class="gas-topbar">
+        <div class="gas-brand">
+            <div class="gas-brand-icon">
+                <i class="fas fa-flask"></i>
+            </div>
+            <span class="gas-brand-text">Apps Script</span>
+            <span class="gas-brand-badge">Web App</span>
+        </div>
+        <div class="gas-title-area">
+            <h1>Respuestas Abiertas — Análisis Cualitativo</h1>
+            <div class="gas-subtitle">Liceo María Elena · Fundación Chile</div>
+        </div>
+        <div class="gas-actions">
+            <button class="gas-btn-icon" id="btnRefresh" title="Actualizar datos desde Sheets">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="gas-btn-icon" id="btnExport" title="Exportar a CSV">
+                <i class="fas fa-file-csv"></i>
+            </button>
+            <div class="gas-user-avatar" title="Fundación Chile">
+                <span>FC</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====== FILTER STRIP ====== -->
+    <div class="gas-filters">
+        <div class="gas-filter-chip">
+            <label>Audiencia</label>
+            <select id="filterAudiencia">
+                <option value="all" selected>Todas</option>
+                <option value="egr_practica">Enc. 1 — Egresados con Práctica</option>
+                <option value="egr_sin">Enc. 2 — Egresados sin Práctica</option>
+                <option value="empresas">Enc. 3 — Empresas Receptoras</option>
+                <option value="docentes">Enc. 4 — Docentes EMTP</option>
+            </select>
+        </div>
+        <div class="gas-filter-chip">
+            <label>Pregunta</label>
+            <select id="filterPregunta">
+                <option value="all" selected>Todas las preguntas</option>
+                <!-- Enc. 1 -->
+                <optgroup label="Enc. 1 — Egresados con Práctica">
+                    <option value="p1_b1">Conocimientos más útiles en práctica (B)</option>
+                    <option value="p1_b2">Habilidades que faltaron (B)</option>
+                    <option value="p1_c1">Métodos de enseñanza efectivos (C)</option>
+                    <option value="p1_g1">Habilidades siglo XXI más útiles (G)</option>
+                </optgroup>
+                <!-- Enc. 2 -->
+                <optgroup label="Enc. 2 — Egresados sin Práctica">
+                    <option value="p2_e1">Orientación/apoyo que necesitó (E)</option>
+                    <option value="p2_g1">Sugerencias al liceo (G)</option>
+                </optgroup>
+                <!-- Enc. 3 -->
+                <optgroup label="Enc. 3 — Empresas Receptoras">
+                    <option value="p3_b1">Fortalezas de practicantes (B)</option>
+                    <option value="p3_b2">Debilidades de practicantes (B)</option>
+                    <option value="p3_d1">Habilidades deficientes (D)</option>
+                    <option value="p3_i1">Recomendaciones a liceos (I)</option>
+                </optgroup>
+                <!-- Enc. 4 -->
+                <optgroup label="Enc. 4 — Docentes EMTP">
+                    <option value="p4_b1">Contenidos a incorporar en currículum (B)</option>
+                    <option value="p4_b2">Contenidos obsoletos (B)</option>
+                    <option value="p4_c1">Obstáculos para metodologías innovadoras (C)</option>
+                    <option value="p4_f1">Estrategias para competencias transversales (F)</option>
+                    <option value="p4_f2">Estrategias para habilidades siglo XXI (F)</option>
+                    <option value="p4_g1">Tecnologías a incorporar por especialidad (G)</option>
+                    <option value="p4_h1">Acciones para mejorar empleabilidad (H)</option>
+                    <option value="p4_j1">Recursos/equipamiento prioritarios (J)</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="gas-filter-chip">
+            <label>Especialidad</label>
+            <select id="filterEspecialidad">
+                <option value="all" selected>Todas</option>
+                <option value="mecanica">Mecánica Automotriz</option>
+                <option value="quimica">Química Industrial</option>
+            </select>
+        </div>
+        <div class="gas-filter-chip">
+            <label>Cohorte</label>
+            <select id="filterCohorte">
+                <option value="all" selected>Todas</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+        </div>
+        <div class="gas-search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Buscar por palabra clave en texto libre...">
+        </div>
+        <div class="gas-filter-count" id="filterStatus">
+            <i class="fas fa-database"></i> <span>248 respuestas cargadas · 18 preguntas abiertas</span>
+        </div>
+    </div>
+
+    <!-- ====== MAIN CONTENT ====== -->
+    <main class="gas-main">
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi kpi-blue">
+                <div class="kpi-label">Total Respuestas</div>
+                <div class="kpi-value" id="kpiTotalResp">248</div>
+                <div class="kpi-sub">De 18 preguntas abiertas</div>
+            </div>
+            <div class="kpi kpi-green">
+                <div class="kpi-label">Enc. 1 — Egr. con Práctica</div>
+                <div class="kpi-value" id="kpiEnc1">82</div>
+                <div class="kpi-sub">~12 preguntas abiertas</div>
+            </div>
+            <div class="kpi kpi-purple">
+                <div class="kpi-label">Enc. 3 — Empresas</div>
+                <div class="kpi-value" id="kpiEnc3">54</div>
+                <div class="kpi-sub">~12 preguntas abiertas</div>
+            </div>
+            <div class="kpi kpi-orange">
+                <div class="kpi-label">Enc. 4 — Docentes</div>
+                <div class="kpi-value" id="kpiEnc4">67</div>
+                <div class="kpi-sub">Mayor cantidad de abiertas</div>
+            </div>
+            <div class="kpi kpi-teal">
+                <div class="kpi-label">Enc. 2 — Egr. sin Práctica</div>
+                <div class="kpi-value" id="kpiEnc2">45</div>
+                <div class="kpi-sub">~3 preguntas abiertas</div>
+            </div>
+        </div>
+
+        <!-- Two-column layout: Table + Detail -->
+        <div class="two-col">
+            <!-- Left: Table -->
+            <div class="card main-table-card">
+                <div class="card-title">
+                    <i class="fas fa-list"></i> Respuestas Abiertas
+                    <span class="card-title-count" id="respCountLabel">Mostrando 1–10 de 248</span>
+                </div>
+                <div class="table-wrapper">
+                    <table class="resp-table" id="respTable">
+                        <thead>
+                            <tr>
+                                <th class="th-id">#</th>
+                                <th class="th-audiencia">Audiencia</th>
+                                <th class="th-pregunta">Pregunta</th>
+                                <th class="th-especialidad">Especialidad</th>
+                                <th class="th-cohorte">Cohorte</th>
+                                <th class="th-respuesta">Respuesta (extracto)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="respBody">
+                            <!-- JS fills this -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination"></div>
+            </div>
+
+            <!-- Right: Detail Panel -->
+            <div class="detail-panel">
+                <div class="card detail-card">
+                    <div class="card-title"><i class="fas fa-user-circle"></i> Detalle del Respondente</div>
+                    <div id="responseDetail">
+                        <div class="empty-state">
+                            <i class="fas fa-hand-pointer"></i>
+                            <p>Selecciona una fila de la tabla para ver la respuesta completa y los datos del respondente.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card detail-card">
+                    <div class="card-title"><i class="fas fa-comment-dots"></i> Respuesta Completa</div>
+                    <div id="fullResponse">
+                        <div class="empty-state">
+                            <i class="fas fa-quote-left"></i>
+                            <p>La respuesta completa se mostrará aquí al seleccionar un registro.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="gas-footer">
+        <span>Google Apps Script Web App · Datos desde Google Sheets · Actualizado 04/03/2026</span>
+        <span class="gas-footer-powered">Powered by <strong>Google Apps Script</strong> <i class="fab fa-google" style="color:var(--g-blue);"></i></span>
+    </footer>
+
+    <!-- ====== LOADER ====== -->
+    <div id="loader" class="gas-loader hidden">
+        <div class="gas-loader-inner">
+            <div class="gas-spinner"></div>
+            <span>Consultando datos desde Google Sheets...</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

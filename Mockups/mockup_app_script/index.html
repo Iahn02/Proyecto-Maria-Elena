@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Egresados — Liceo María Elena · Looker Studio</title>
+    <meta name="description" content="Dashboard de seguimiento de egresados EMTP del Liceo María Elena. Visualización de trayectorias educativas, inserción laboral, análisis por cohorte y equidad.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+</head>
+<body>
+    <!-- Looker Studio Top Bar -->
+    <header class="looker-topbar">
+        <div class="looker-brand">
+            <svg class="looker-logo" viewBox="0 0 24 24" width="28" height="28">
+                <path fill="#4285F4" d="M22.56 12.25c0-.67-.06-1.3-.17-1.92H12v3.64h5.92a5.06 5.06 0 0 1-2.19 3.32v2.76h3.55c2.08-1.91 3.28-4.73 3.28-7.8z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.76c-.98.66-2.23 1.06-3.73 1.06-2.87 0-5.3-1.94-6.16-4.54H2.18v2.84A10.98 10.98 0 0 0 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18A10.98 10.98 0 0 0 1 12c0 1.78.42 3.46 1.18 4.94l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.86-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span class="brand-text">Looker Studio</span>
+        </div>
+        <div class="report-title">
+            <h1 id="reportTitle">Seguimiento de Egresados EMTP — Liceo María Elena</h1>
+        </div>
+        <div class="looker-actions">
+            <button class="looker-btn" id="btnShare" title="Compartir"><i class="fas fa-share-alt"></i></button>
+            <button class="looker-btn" id="btnEdit" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+            <button class="looker-btn looker-btn-more" id="btnMore" title="Más opciones"><i class="fas fa-ellipsis-v"></i></button>
+            <div class="user-avatar" title="Fundación Chile">
+                <span>FC</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Tabs (Looker Studio navigation) -->
+    <nav class="page-tabs" id="pageTabs">
+        <button class="page-tab active" data-page="overview">
+            <i class="fas fa-chart-line"></i> Visión General
+        </button>
+        <button class="page-tab" data-page="trayectorias">
+            <i class="fas fa-graduation-cap"></i> Trayectorias Educativas
+        </button>
+        <button class="page-tab" data-page="insercion">
+            <i class="fas fa-briefcase"></i> Inserción Laboral
+        </button>
+        <button class="page-tab" data-page="cohorte">
+            <i class="fas fa-layer-group"></i> Análisis por Cohorte
+        </button>
+        <button class="page-tab" data-page="demograficos">
+            <i class="fas fa-hand-holding-heart"></i> Datos Demográficos y Equidad
+        </button>
+    </nav>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label>Especialidad</label>
+            <select id="filterEspecialidad">
+                <option value="all" selected>Todas</option>
+                <option value="mecanica">Mecánica Automotriz</option>
+                <option value="quimica">Química Industrial</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Cohorte</label>
+            <select id="filterCohorte">
+                <option value="all" selected>Todas</option>
+                <option value="2025">2025</option>
+                <option value="2024" selected>2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Audiencia</label>
+            <select id="filterAudiencia">
+                <option value="all" selected>Todas</option>
+                <option value="egr_practica">Egresados con Práctica</option>
+                <option value="egr_sin">Egresados sin Práctica</option>
+                <option value="empresas">Empresas Receptoras</option>
+                <option value="docentes">Docentes EMTP</option>
+            </select>
+        </div>
+        <div class="filter-applied" id="filterCount">
+            <i class="fas fa-filter"></i> <span>Sin filtros aplicados</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE: VISIÓN GENERAL ================= -->
+    <section class="page-content active" id="page-overview">
+        <div class="page-section-title">
+            <h2>Visión General</h2>
+            <p>Métricas principales del estudio de seguimiento de egresados — Liceo María Elena</p>
+        </div>
+
+        <div class="kpi-row">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label">Egresados Encuestados</div>
+                <div class="kpi-value" id="kpi-total">127</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> 82 con práctica · 45 sin práctica</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-label">Tasa de Inserción Laboral</div>
+                <div class="kpi-value" id="kpi-insercion">68.3%</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +5.2pp vs cohorte anterior</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-label">Continuidad Estudios ES</div>
+                <div class="kpi-value" id="kpi-estudios">32.5%</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +3.8pp vs cohorte anterior</div>
+            </div>
+            <div class="kpi-card kpi-orange">
+                <div class="kpi-label">NPS Satisfacción (Egresados)</div>
+                <div class="kpi-value" id="kpi-nps">+42</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +8 pts vs 2023</div>
+            </div>
+            <div class="kpi-card kpi-teal">
+                <div class="kpi-label">NPS Empresas</div>
+                <div class="kpi-value" id="kpi-nps-empresas">+55</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +12 pts vs 2023</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card wide">
+                <div class="chart-title">Egresados encuestados por cohorte y tipo</div>
+                <div class="chart-body"><canvas id="chart-overview-trend"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Distribución por especialidad</div>
+                <div class="chart-body"><canvas id="chart-overview-especialidad"></canvas></div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">Situación actual de egresados</div>
+                <div class="chart-body"><canvas id="chart-overview-situacion"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Satisfacción con la formación (NPS egresados)</div>
+                <div class="chart-body"><canvas id="chart-overview-satisfaccion"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Satisfacción empresas receptoras (NPS)</div>
+                <div class="chart-body"><canvas id="chart-overview-nps-empresas"></canvas></div>
+            </div>
+        </div>
+
+        <!-- Summary table -->
+        <div class="table-card">
+            <div class="table-title">Resumen por especialidad y audiencia</div>
+            <div class="table-responsive">
+                <table id="table-overview">
+                    <thead>
+                        <tr>
+                            <th>Especialidad</th>
+                            <th>Egr. con Práctica</th>
+                            <th>Egr. sin Práctica</th>
+                            <th>Empresas</th>
+                            <th>Tasa Inserción</th>
+                            <th>Continuidad ES</th>
+                            <th>NPS Egresados</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-overview"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PAGE: TRAYECTORIAS EDUCATIVAS ================= -->
+    <section class="page-content" id="page-trayectorias">
+        <div class="page-section-title">
+            <h2>Trayectorias Educativas</h2>
+            <p>Continuidad de estudios superiores, convalidaciones y carreras post-egreso</p>
+        </div>
+
+        <div class="kpi-row">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label">Continúa en ES</div>
+                <div class="kpi-value">32.5%</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +3.8pp</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-label">ES Universitaria</div>
+                <div class="kpi-value">12.8%</div>
+                <div class="kpi-sub">16 egresados en universidades</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-label">ES Técnica (IP/CFT)</div>
+                <div class="kpi-value">19.7%</div>
+                <div class="kpi-sub">25 egresados en IP o CFT</div>
+            </div>
+            <div class="kpi-card kpi-orange">
+                <div class="kpi-label">Convalidaciones Logradas</div>
+                <div class="kpi-value">64.3%</div>
+                <div class="kpi-sub">27 de 42 que solicitaron</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card wide">
+                <div class="chart-title">Tipo de educación superior por especialidad</div>
+                <div class="chart-body"><canvas id="chart-tray-tipo"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">% que continúa en ES (universitaria vs técnica)</div>
+                <div class="chart-body"><canvas id="chart-tray-nivel"></canvas></div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">Carreras más elegidas post-egreso</div>
+                <div class="chart-body"><canvas id="chart-tray-carreras"></canvas></div>
+            </div>
+            <div class="chart-card wide">
+                <div class="chart-title">Tasa de convalidaciones logradas por cohorte</div>
+                <div class="chart-body"><canvas id="chart-tray-convalidacion"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PAGE: INSERCIÓN LABORAL ================= -->
+    <section class="page-content" id="page-insercion">
+        <div class="page-section-title">
+            <h2>Inserción Laboral</h2>
+            <p>Empleo formal e informal, contratación por empresa de práctica, tiempo al empleo y visión empresas</p>
+        </div>
+
+        <div class="kpi-row">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label">Empleo Formal</div>
+                <div class="kpi-value">52.4%</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +4.1pp</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-label">Contratado por Empresa de Práctica</div>
+                <div class="kpi-value">38.2%</div>
+                <div class="kpi-sub">31 de 82 egresados con práctica</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-label">Tiempo Prom. al Primer Empleo</div>
+                <div class="kpi-value">2.4 meses</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-down"></i> -0.6 meses vs anterior</div>
+            </div>
+            <div class="kpi-card kpi-orange">
+                <div class="kpi-label">NPS Supervisores (Empresas)</div>
+                <div class="kpi-value">+55</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +12 pts</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">Empleo formal vs informal</div>
+                <div class="chart-body"><canvas id="chart-ins-formalidad"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">% contratado por empresa de práctica</div>
+                <div class="chart-body"><canvas id="chart-ins-contratacion"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Tiempo al primer empleo (meses)</div>
+                <div class="chart-body"><canvas id="chart-ins-tiempo"></canvas></div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card wide">
+                <div class="chart-title">Satisfacción de empresas por dimensión (escala 1–5)</div>
+                <div class="chart-body"><canvas id="chart-ins-satisfaccion-emp"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Factores de selección para contratación (empresas)</div>
+                <div class="chart-body"><canvas id="chart-ins-factores"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PAGE: ANÁLISIS POR COHORTE ================= -->
+    <section class="page-content" id="page-cohorte">
+        <div class="page-section-title">
+            <h2>Análisis por Cohorte</h2>
+            <p>Comparativa de competencias técnicas, transversales y habilidades siglo XXI entre generaciones</p>
+        </div>
+
+        <div class="kpi-row">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label">Cohortes Analizadas</div>
+                <div class="kpi-value">4</div>
+                <div class="kpi-sub">2022 — 2025</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-label">Mejor Cohorte (Inserción)</div>
+                <div class="kpi-value">2024</div>
+                <div class="kpi-sub">68.3% inserción laboral</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-label">Mayor Brecha Detectada</div>
+                <div class="kpi-value">Comp. Digitales</div>
+                <div class="kpi-sub">Mec. Automotriz vs Quím. Industrial</div>
+            </div>
+            <div class="kpi-card kpi-orange">
+                <div class="kpi-label">Habilidad Siglo XXI Mejor Evaluada</div>
+                <div class="kpi-value">Trabajo en Equipo</div>
+                <div class="kpi-sub">4.3 / 5.0 promedio</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card wide">
+                <div class="chart-title">Competencias técnicas por cohorte — promedio (1–5)</div>
+                <div class="chart-body"><canvas id="chart-coh-tecnicas"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Competencias transversales — promedio por cohorte</div>
+                <div class="chart-body"><canvas id="chart-coh-transversales"></canvas></div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">Habilidades siglo XXI por generación</div>
+                <div class="chart-body"><canvas id="chart-coh-siglo21"></canvas></div>
+            </div>
+            <div class="chart-card wide">
+                <div class="chart-title">Brechas por especialidad (Mecánica vs Química) — cohorte 2024</div>
+                <div class="chart-body"><canvas id="chart-coh-brechas"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= PAGE: DATOS DEMOGRÁFICOS Y EQUIDAD ================= -->
+    <section class="page-content" id="page-demograficos">
+        <div class="page-section-title">
+            <h2>Datos Demográficos y Equidad</h2>
+            <p>Distribución por género, especialidad, barreras reportadas y análisis de inclusión</p>
+        </div>
+
+        <div class="kpi-row">
+            <div class="kpi-card kpi-blue">
+                <div class="kpi-label">Total Egresados Encuestados</div>
+                <div class="kpi-value">127</div>
+                <div class="kpi-sub">Cohortes 2022–2025</div>
+            </div>
+            <div class="kpi-card kpi-green">
+                <div class="kpi-label">% Género Femenino</div>
+                <div class="kpi-value">28.3%</div>
+                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +4.1pp vs 2023</div>
+            </div>
+            <div class="kpi-card kpi-purple">
+                <div class="kpi-label">Reportaron Barreras</div>
+                <div class="kpi-value">34.6%</div>
+                <div class="kpi-sub">44 egresados reportaron dificultades</div>
+            </div>
+            <div class="kpi-card kpi-orange">
+                <div class="kpi-label">Principal Barrera</div>
+                <div class="kpi-value">Económica</div>
+                <div class="kpi-sub">52% de quienes reportaron barreras</div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card">
+                <div class="chart-title">Distribución por género y especialidad</div>
+                <div class="chart-body"><canvas id="chart-demo-genero"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Rango etario de egresados</div>
+                <div class="chart-body"><canvas id="chart-demo-edad"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Barreras reportadas (sección Equidad)</div>
+                <div class="chart-body"><canvas id="chart-demo-barreras"></canvas></div>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-card wide">
+                <div class="chart-title">Grupos que reportaron dificultades — análisis de inclusión</div>
+                <div class="chart-body tall"><canvas id="chart-demo-inclusion"></canvas></div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Distribución por cohorte de egreso</div>
+                <div class="chart-body"><canvas id="chart-demo-cohorte"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="looker-footer">
+        <span>Generado desde Looker Studio · Datos actualizados al 04/03/2026</span>
+        <span class="footer-powered">Powered by <strong>Google</strong></span>
+    </footer>
+
+    <!-- Loader overlay -->
+    <div id="loader" class="loader-overlay hidden">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <span>Cargando datos...</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
