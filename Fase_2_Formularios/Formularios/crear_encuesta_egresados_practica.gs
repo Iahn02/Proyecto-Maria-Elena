@@ -103,11 +103,13 @@ function crearFormularioEgresadosPractica() {
   form.addGridItem()
       .setTitle('15a. Evalúe su nivel de desarrollo en las siguientes competencias técnicas abordadas en el liceo:')
       .setRows([
-        'Diagnóstico de motores y sistemas automotrices',
-        'Manejo seguro de herramientas y equipamiento automotriz',
-        'Lectura de manuales, planos o procedimientos de la marca',
-        'Aplicación de normativas de seguridad e higiene de taller',
-        'Resolución de fallas y anomalías mecánicas y eléctricas'
+        'Mantenimiento Preventivo y Correctivo: Realizar cambios de aceite, filtros, fluidos, correas y bujías, junto con revisiones de niveles (refrigerante, aceite).',
+        'Diagnóstico y Reparación de Motores: Diagnosticar fallas en motores de combustión interna, realizar afinamientos y reparaciones menores/medias.',
+        'Sistemas de Suspensión, Dirección y Frenos: Desarmar, reparar y ajustar sistemas de frenos (discos/tambores), direcciones hidráulicas y componentes de suspensión.',
+        'Electricidad y Electrónica Básica: Comprobar estado de baterías, componentes eléctricos, iluminación y diagnóstico básico con escáner y multímetro.',
+        'Sistemas de Transmisión: Mantenimiento y reparación de transmisiones manuales y componentes de transmisión automática.',
+        'Uso de Herramientas e Instrumentos: Operación precisa de herramientas manuales, torquímetros, instrumentos de medición y equipos de taller.',
+        'Interpretación Técnica: Lectura de manuales de fabricante, diagramas eléctricos y técnicos para identificar componentes.'
       ])
       .setColumns(['Muy bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'])
       .setRequired(true);
@@ -119,11 +121,12 @@ function crearFormularioEgresadosPractica() {
   form.addGridItem()
       .setTitle('15b. Evalúe su nivel de desarrollo en las siguientes competencias técnicas abordadas en el liceo:')
       .setRows([
-        'Técnicas de muestreo y análisis de laboratorio',
-        'Manejo seguro de reactivos químicos e instrumentación',
-        'Lectura de protocolos e interpretación de resultados de ensayos',
-        'Control de calidad en procesos industriales',
-        'Aplicación de normativas ambientales y bioseguridad'
+        'Análisis Químico-Instrumental: Ejecución de técnicas cualitativas y cuantitativas (titulación, gravimetría) y operación de equipos analíticos para control de calidad.',
+        'Manejo de Materiales y Reactivos: Preparación de soluciones valoradas, reactivos, y manejo preciso del material de vidrio.',
+        'Seguridad y Normativa: Aplicación estricta de Buenas Prácticas de Laboratorio (BPL), normas de seguridad, manejo de hojas de seguridad (SDS) y prevención de riesgos.',
+        'Control de Procesos: Muestreo de materias primas y análisis en proceso de productos.',
+        'Gestión de Datos: Registro de resultados, interpretación analítica y uso de software básico de laboratorio.',
+        'Mantenimiento Rutinario: Calibración y limpieza de instrumentos de medición.'
       ])
       .setColumns(['Muy bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'])
       .setRequired(true);

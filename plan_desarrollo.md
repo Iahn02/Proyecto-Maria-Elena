@@ -104,11 +104,11 @@
 
 ## 📦 Checklist de Entregables
 
-- [ ] Fase 1: Google Sheets con 7 hojas y estructura relacional listas (S1)
-- [ ] Fase 2: Formulario 1: Egresados en Práctica — 12 secciones con lógica condicional (S2-S3)
-- [ ] Fase 2: Formulario 2: Egresados sin Práctica — 7 secciones programadas (S2-S3)
-- [ ] Fase 2: Formulario 3: Empresas Receptoras — 9 secciones lógicas (S2-S3)
-- [ ] Fase 2: Formulario 4: Docentes EMTP — 11 secciones parametrizadas (S3)
+- [x] Fase 1: Google Sheets con 7 hojas y estructura relacional listas (S1)
+- [x] Fase 2: Formulario 1: Egresados en Práctica — 12 secciones con lógica condicional (S2-S3)
+- [x] Fase 2: Formulario 2: Egresados sin Práctica — 7 secciones programadas (S2-S3)
+- [x] Fase 2: Formulario 3: Empresas Receptoras — 9 secciones lógicas (S2-S3)
+- [x] Fase 2: Formulario 4: Docentes EMTP — 11 secciones parametrizadas (S3)
 - [ ] Fase 3: Dashboard Looker Studio — 5 páginas de reporte integradas 🔴 *Hito de Pago* (S3-S5)
 - [ ] Fase 4: Interfaz web corporativa de análisis cualitativo (S5-S6)
 - [ ] Fase 5: Landing Page centralizadora montada en Apps Script (S6-S7)

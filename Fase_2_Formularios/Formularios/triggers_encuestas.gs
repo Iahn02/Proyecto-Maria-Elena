@@ -71,17 +71,31 @@ function onSubmitDocentes(e) {
  */
 function instalarTriggersDeEncuestas() {
   const ids = {
-    practica: 'ID_FORM_PRACTICA',
-    sinPractica: 'ID_FORM_SIN_PRACTICA',
-    empresas: 'ID_FORM_EMPRESAS',
-    docentes: 'ID_FORM_DOCENTES'
+    practica: '14MQ7y78X635Ntg99eGU-U82UrMT87nMF3fe9pNiy-gk',
+    sinPractica: '1DWcDXdOs74mbWJU_xb1LxjofuUbO79hWLsY5BuXN87I',
+    empresas: '1iM7CFlfpNbrLRygwT_sAwpT1gZnTP4d51t4K-QJRDBQ',
+    docentes: '1gfK-o4V3_xxR0INhU4_Jr4xYKXpLvqFUi4pu-rdoIG8'
   };
 
-  /*
   ScriptApp.newTrigger('onSubmitEgresadosPractica')
     .forForm(FormApp.openById(ids.practica))
     .onFormSubmit()
     .create();
-  // ... (repetir para los otros form)
-  */
+    
+  ScriptApp.newTrigger('onSubmitEgresadosSinPractica')
+    .forForm(FormApp.openById(ids.sinPractica))
+    .onFormSubmit()
+    .create();
+    
+  ScriptApp.newTrigger('onSubmitEmpresas')
+    .forForm(FormApp.openById(ids.empresas))
+    .onFormSubmit()
+    .create();
+    
+  ScriptApp.newTrigger('onSubmitDocentes')
+    .forForm(FormApp.openById(ids.docentes))
+    .onFormSubmit()
+    .create();
+    
+  Logger.log('Todos los Triggers instalados correctamente.');
 }

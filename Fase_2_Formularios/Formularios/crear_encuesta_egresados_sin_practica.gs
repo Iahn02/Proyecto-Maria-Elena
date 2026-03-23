@@ -5,13 +5,11 @@
  * 
  * Este script utiliza FormApp para construir de manera automática el 
  * formulario dirigido a los egresados que no realizaron su práctica profesional.
- * Estructura definida en el plan_desarrollo.md (7 Secciones: A a la G).
  */
 
 function crearFormularioEgresadosSinPractica() {
-  // 1. Crear el formulario
   const form = FormApp.create('Liceo María Elena | Encuesta a Egresados SIN Práctica Profesional');
-  form.setDescription('Objetivo: Entender las razones, barreras y la situación actual de los estudiantes egresados del Liceo Técnico Profesional que no lograron realizar o finalizar su práctica profesional.\n\nQueremos apoyarte. Tus respuestas son confidenciales y nos ayudarán a mejorar nuestros procesos de acompañamiento.')
+  form.setDescription('Objetivo: Recoger información de estudiantes egresados del Liceo Técnico Profesional que no realizaron práctica profesional, para orientar futuras acciones de apoyo en formación, empleabilidad y continuidad de estudios.\n\nTus respuestas son confidenciales y nos ayudarán a mejorar nuestros procesos.')
       .setConfirmationMessage('¡Muchas gracias por compartir tu experiencia! Tu información es muy valiosa para nosotros y nos ayudará a mejorar el apoyo a futuros estudiantes.')
       .setAllowResponseEdits(false)
       .setAcceptingResponses(true);
@@ -31,37 +29,37 @@ function crearFormularioEgresadosSinPractica() {
       
   form.addMultipleChoiceItem()
       .setTitle('4. Especialidad técnica cursada en el Liceo')
-      .setChoiceValues(['Mecánica Automotriz', 'Química Industrial', 'Otra'])
+      .setChoiceValues(['Mecánica Automotriz', 'Química Industrial'])
+      .showOtherOption(true)
       .setRequired(true);
       
-  form.addTextItem().setTitle('5. Año de egreso de 4to Medio').setRequired(true);
+  form.addTextItem().setTitle('5. Año de egreso').setRequired(true);
 
   // ***************************************************************
-  // SECCIÓN B: MOTIVOS DE NO REALIZACIÓN
+  // SECCIÓN B: MOTIVOS PARA NO REALIZAR PRÁCTICA PROFESIONAL
   // ***************************************************************
-  form.addPageBreakItem().setTitle('SECCIÓN B: MOTIVOS POR LOS CUALES NO REALIZÓ LA PRÁCTICA');
+  form.addPageBreakItem().setTitle('SECCIÓN B: MOTIVOS PARA NO REALIZAR PRÁCTICA PROFESIONAL');
   
   form.addCheckboxItem()
-      .setTitle('6. ¿Cuáles fueron las razones principales por las que no realizaste o no finalizaste tu práctica profesional? (Puedes seleccionar más de una)')
+      .setTitle('6. ¿Por qué motivo no realizaste tu práctica profesional? (Puedes marcar más de una opción)')
       .setChoiceValues([
-        'Falta de cupos o centros de práctica disponibles',
-        'Incompatibilidad de horarios por trabajo u otra actividad',
-        'Decidí estudiar una carrera en Educación Superior inmediatamente',
-        'Problemas económicos o falta de recursos para traslados/alimentación',
-        'Problemas familiares o de salud',
-        'No recibí suficiente orientación o apoyo del Liceo para encontrar un cupo',
-        'Pérdida de interés en la especialidad estudiada'
+        'Falta de oportunidades/lugares de práctica',
+        'Motivos personales o familiares',
+        'Salud',
+        'Decidí trabajar directamente',
+        'Decidí continuar estudios',
+        'Incumplimiento de requisitos exigidos en el centro de práctica',
+        'Falta de información para gestionar práctica'
       ])
       .showOtherOption(true)
       .setRequired(true);
       
   form.addMultipleChoiceItem()
-      .setTitle('7. ¿Sientes que el Liceo te brindó el apoyo necesario para encontrar tu práctica?')
+      .setTitle('7. ¿Tuviste apoyo del liceo para gestionar tu práctica?')
       .setChoiceValues([
-        'Sí, recibí mucho apoyo',
-        'Sí, pero no fue suficiente',
-        'No, no recibí apoyo',
-        'No solicité apoyo al Liceo'
+        'Sí',
+        'No',
+        'No lo solicité'
       ])
       .setRequired(true);
 
@@ -71,88 +69,147 @@ function crearFormularioEgresadosSinPractica() {
   form.addPageBreakItem().setTitle('SECCIÓN C: SITUACIÓN ACTUAL');
   
   form.addMultipleChoiceItem()
-      .setTitle('8. ¿Cuál es tu situación laboral y/o de estudios actualmente?')
+      .setTitle('8. ¿Cuál es tu situación actual?')
       .setChoiceValues([
-        'Trabajando en algo relacionado con mi especialidad',
-        'Trabajando en algo NO relacionado con mi especialidad',
-        'Estudiando en la Educación Superior',
-        'Estudiando y trabajando simultáneamente',
-        'Buscando empleo activamente (Cesante)',
-        'No estoy trabajando ni estudiando por ahora'
+        'Buscando trabajo',
+        'Trabajando en área relacionada con mi especialidad',
+        'Trabajando en área no relacionada',
+        'Estudiando en educación superior',
+        'Trabajando y estudiando'
       ])
+      .showOtherOption(true)
       .setRequired(true);
       
-  form.addTextItem().setTitle('9. ¿Cuánto tiempo ha pasado desde que egresaste y quedaste en pausa con tu práctica? (Ej: "6 meses", "2 años")');
+  form.addMultipleChoiceItem()
+      .setTitle('9. ¿Cuánto tiempo ha pasado desde tu egreso sin realizar práctica profesional?')
+      .setChoiceValues([
+        'Menos de 3 meses',
+        'Entre 3 y 6 meses',
+        'Entre 6 meses y 1 año',
+        'Entre 1 y 2 años',
+        'Más de 2 años'
+      ])
+      .setRequired(true);
 
-  // PREGUNTA DE BIFURCACIÓN (Final de Sección C)
-  const preguntaInteres = form.addMultipleChoiceItem()
-      .setTitle('10. ¿Tienes interés en realizar tu práctica profesional para obtener tu título técnico en el futuro cercano?')
+  const preguntaInteresPractica = form.addMultipleChoiceItem()
+      .setTitle('10. ¿Tienes interés en realizar la práctica profesional en el futuro?')
       .setRequired(true);
 
   // ***************************************************************
-  // SECCIÓN D: PLANES FUTUROS Y LÓGICA CONDICIONAL
+  // SECCIÓN D: PLANES FUTUROS Y DECISIONES (RAMAS)
   // ***************************************************************
-  const paginaVincularPractica = form.addPageBreakItem().setTitle('SECCIÓN D: PLANES FUTUROS E INTERÉS EN RETOMAR LA PRÁCTICA');
   
-  form.addParagraphTextItem()
-      .setTitle('10b. ¿En qué áreas o tipo de empresa te interesaría realizar la práctica?')
-      .setRequired(false);
+  // Rama D1: Razones para no realizar práctica
+  const secD1 = form.addPageBreakItem().setTitle('SECCIÓN D: PLANES FUTUROS Y DECISIONES (Continuación)');
+  
+  form.addMultipleChoiceItem()
+      .setTitle('11. Si respondiste "No" o "No estoy seguro/a", ¿por qué?')
+      .setChoiceValues([
+        'Ya tengo empleo y no la necesito',
+        'No le veo utilidad',
+        'No tengo información de cómo hacerla ahora',
+        'No tengo los recursos (transporte, tiempo, etc.)',
+        'Perdí interés en mi especialidad'
+      ])
+      .showOtherOption(true)
+      .setRequired(true);
+
+  // Rama D2: Continuar estudios
+  const secD2 = form.addPageBreakItem().setTitle('SECCIÓN D: PLANES FUTUROS Y DECISIONES (Estudios Superiores)');
+  secD1.setGoToPage(secD2); // Conecta D1 con D2
+  
+  const preguntaEstudios = form.addMultipleChoiceItem()
+      .setTitle('12. ¿Estás interesado/a en continuar estudios superiores?')
+      .setRequired(true);
+
+  // Rama D3: Tipos de estudios
+  const secD3 = form.addPageBreakItem().setTitle('SECCIÓN D: PLANES FUTUROS Y DECISIONES (Tipo de estudios)');
+  
+  form.addMultipleChoiceItem()
+      .setTitle('13. En caso afirmativo, ¿qué tipo de estudios te interesan?')
+      .setChoiceValues([
+        'Carrera técnica relacionada con mi especialidad',
+        'Carrera técnica en área diferente',
+        'Carrera universitaria relacionada',
+        'Carrera universitaria en área diferente',
+        'Curso de especialización o certificación'
+      ])
+      .showOtherOption(true)
+      .setRequired(true);
 
   // ***************************************************************
   // SECCIÓN E: ORIENTACIÓN Y APOYO
   // ***************************************************************
-  const secE = form.addPageBreakItem().setTitle('SECCIÓN E: ORIENTACIÓN Y SERVICIOS DEL LICEO');
+  const secE = form.addPageBreakItem().setTitle('SECCIÓN E: ORIENTACIÓN Y APOYO');
   
-  // Asignamos saltos: Después de D, la página fluye normal a E
-  paginaVincularPractica.setGoToPage(secE);
-
-  preguntaInteres.setChoices([
-    preguntaInteres.createChoice('Sí, me interesa y me gustaría recibir orientación para lograrlo', paginaVincularPractica),
-    preguntaInteres.createChoice('Tal vez, pero me resulta complicado por mi situación actual', paginaVincularPractica),
-    preguntaInteres.createChoice('No, he decidido no titularme como técnico', secE)
+  // Configuramos el salto de D2 a E para que se salte D3 si no estudiará
+  secD3.setGoToPage(secE);
+  
+  preguntaEstudios.setChoices([
+    preguntaEstudios.createChoice('Sí, estoy cursando actualmente', secD3),
+    preguntaEstudios.createChoice('Sí, planeo hacerlo próximamente', secD3),
+    preguntaEstudios.createChoice('No lo tengo contemplado', secE),
+    preguntaEstudios.createChoice('Aún no lo he decidido', secE)
   ]);
-  
+
+  // Configuramos ahora la conexión principal de C a D1 o D2
+  preguntaInteresPractica.setChoices([
+    preguntaInteresPractica.createChoice('Sí', secD2),                  // Salta a D2 (Estudios)
+    preguntaInteresPractica.createChoice('No', secD1),                  // Va a D1 (Razones)
+    preguntaInteresPractica.createChoice('No estoy seguro/a', secD1)    // Va a D1 (Razones)
+  ]);
+
   form.addGridItem()
-      .setTitle('11. Por favor, evalúa de 1 a 5 cómo percibiste los siguientes servicios de apoyo y orientación en el Liceo:')
+      .setTitle('14. Evalúa los siguientes apoyos que recibiste en el liceo:')
       .setRows([
-        'Información entregada sobre centros de práctica',
-        'Acompañamiento del profesor tutor o encargado de prácticas',
-        'Preparación para enfrentar entrevistas laborales',
-        'Orientación vocacional general en el liceo',
-        'Atención a consultas administrativas sobre titulaciones'
+        'Orientación vocacional',
+        'Preparación para entrevistas laborales',
+        'Información sobre estudios superiores',
+        'Elaboración de curriculum vitae (CV)',
+        'Acompañamiento en decisiones post-egreso'
       ])
-      .setColumns(['1 (Muy deficiente)', '2 (Deficiente)', '3 (Regular)', '4 (Bueno)', '5 (Excelente)'])
+      .setColumns(['Muy insatisfecho', 'Insatisfecho', 'Neutral', 'Satisfecho', 'Muy satisfecho'])
       .setRequired(true);
+      
+  form.addParagraphTextItem()
+      .setTitle('15. ¿Qué tipo de orientación o apoyo hubieras necesitado al egresar?');
 
   // ***************************************************************
-  // SECCIÓN F: BARRERAS
+  // SECCIÓN F: BARRERAS Y EXPECTATIVAS
   // ***************************************************************
-  form.addPageBreakItem().setTitle('SECCIÓN F: BARRERAS Y LIMITACIONES');
+  form.addPageBreakItem().setTitle('SECCIÓN F: BARRERAS Y EXPECTATIVAS');
   
   form.addCheckboxItem()
-      .setTitle('12. ¿Qué barreras o dificultades actuales te impiden realizar la práctica profesional? (Selecciona todas las que apliquen)')
+      .setTitle('16. ¿Qué principales barreras has enfrentado para insertarte laboralmente o continuar estudios? (marcar todas las que correspondan)')
       .setChoiceValues([
         'Falta de recursos económicos',
-        'Falta de redes de contacto o empresas conocidas',
-        'Desconocimiento de los trámites o procesos',
-        'Falta de tiempo por responsabilidades personales/laborales',
-        'Desmotivación o falta de confianza en mis habilidades',
-        'No existen opciones de práctica en mi comuna/localidad'
+        'Falta de redes o contactos',
+        'Falta de información clara',
+        'Baja autoestima o motivación',
+        'No conozco bien mis opciones',
+        'Preparación inadecuada para incorporarse al mundo laboral'
       ])
       .showOtherOption(true);
       
-  form.addParagraphTextItem()
-      .setTitle('13. ¿Qué tipo de apoyo específico necesitarías del Liceo u otra institución para lograr finalizar este proceso?');
+  form.addCheckboxItem()
+      .setTitle('17. ¿Qué necesitas actualmente para avanzar en tus planes de estudio o trabajo?')
+      .setChoiceValues([
+        'Orientación vocacional/laboral',
+        'Contacto con empresas o centros de estudio',
+        'Acceso a becas o apoyos económicos',
+        'Talleres prácticos o nivelación'
+      ])
+      .showOtherOption(true);
 
   // ***************************************************************
-  // SECCIÓN G: COMENTARIOS Y SUGERENCIAS
+  // SECCIÓN G: COMENTARIOS FINALES
   // ***************************************************************
-  form.addPageBreakItem().setTitle('SECCIÓN G: COMENTARIOS Y SUGERENCIAS FINALES');
+  form.addPageBreakItem().setTitle('SECCIÓN G: COMENTARIOS FINALES');
   
   form.addParagraphTextItem()
-      .setTitle('14. Finalmente, ¿qué consejo o sugerencia le darías al Liceo para mejorar el acompañamiento de los estudiantes que están por egresar para que no queden sin su práctica?');
+      .setTitle('18. ¿Qué sugerencias le harías al liceo para mejorar el apoyo a estudiantes que no han podido hacer su práctica profesional?');
 
-  Logger.log('¡Formulario Egresados SIN Práctica creado con éxito!');
+  Logger.log('¡Formulario Egresados SIN Práctica actualizado con la nueva estructura!');
   Logger.log('URL de edición: ' + form.getEditUrl());
   Logger.log('URL para responder: ' + form.getPublishedUrl());
 }

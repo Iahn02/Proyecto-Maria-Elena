@@ -89,44 +89,101 @@ Sistemas de evaluación aplicados
  
 SECCIÓN D: DESARROLLO DE COMPETENCIAS TÉCNICAS Y TRANSVERSALES
  
-15. Evalue su nivel de desarrollo en las siguientes competencias técnicas específicas de su especialidad (adaptar según la especialidad):
+15. Evalue su nivel de desarrollo en las siguientes competencias técnicas específicas de su especialidad:
+
+Especialidad: Mecánica Automotriz
 COMPETENCIA TÉCNICA
 Muy bajo
 Bajo
 Medio
 Alto
 Muy alto
-Competencia Técnica 1
+Mantenimiento Preventivo y Correctivo: Realizar cambios de aceite, filtros, fluidos, correas y bujías, junto con revisiones de niveles (refrigerante, aceite).
  
  
  
  
  
-Competencia Técnica 1
+Diagnóstico y Reparación de Motores: Diagnosticar fallas en motores de combustión interna, realizar afinamientos y reparaciones menores/medias.
  
  
  
  
  
-Competencia Técnica 1
+Sistemas de Suspensión, Dirección y Frenos: Desarmar, reparar y ajustar sistemas de frenos (discos/tambores), direcciones hidráulicas y componentes de suspensión.
  
  
  
  
  
-Competencia Técnica 1
+Electricidad y Electrónica Básica: Comprobar estado de baterías, componentes eléctricos, iluminación y diagnóstico básico con escáner y multímetro.
  
  
  
  
  
-Competencia Técnica 1
+Sistemas de Transmisión: Mantenimiento y reparación de transmisiones manuales y componentes de transmisión automática.
+ 
+ 
+ 
+ 
+ 
+Uso de Herramientas e Instrumentos: Operación precisa de herramientas manuales, torquímetros, instrumentos de medición y equipos de taller.
+ 
+ 
+ 
+ 
+ 
+Interpretación Técnica: Lectura de manuales de fabricante, diagramas eléctricos y técnicos para identificar componentes.
  
  
  
  
  
 
+Especialidad: Química Industrial
+COMPETENCIA TÉCNICA
+Muy bajo
+Bajo
+Medio
+Alto
+Muy alto
+Análisis Químico-Instrumental: Ejecución de técnicas cualitativas y cuantitativas (titulación, gravimetría) y operación de equipos analíticos para control de calidad.
+ 
+ 
+ 
+ 
+ 
+Manejo de Materiales y Reactivos: Preparación de soluciones valoradas, reactivos, y manejo preciso del material de vidrio.
+ 
+ 
+ 
+ 
+ 
+Seguridad y Normativa: Aplicación estricta de Buenas Prácticas de Laboratorio (BPL), normas de seguridad, manejo de hojas de seguridad (SDS) y prevención de riesgos.
+ 
+ 
+ 
+ 
+ 
+Control de Procesos: Muestreo de materias primas y análisis en proceso de productos.
+ 
+ 
+ 
+ 
+ 
+Gestión de Datos: Registro de resultados, interpretación analítica y uso de software básico de laboratorio.
+ 
+ 
+ 
+ 
+ 
+Mantenimiento Rutinario: Calibración y limpieza de instrumentos de medición.
+ 
+ 
+ 
+ 
+ 
  
  
  
