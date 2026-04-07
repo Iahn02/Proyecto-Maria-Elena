@@ -1,3 +1,4 @@
+<script>
 // ============================================
 //  Análisis Cualitativo — Liceo María Elena
 //  Google Apps Script Web App Mockup
@@ -50,157 +51,66 @@ const AUDIENCIA_MAP = {
 const ESPECIALIDADES = ['Mecánica Automotriz', 'Química Industrial'];
 const COHORTES = ['2022', '2023', '2024'];
 
-// Mock responses
-const NOMBRES_EGR = ['Juan Pérez', 'María González', 'Carlos Rojas', 'Valentina Muñoz', 'Diego Soto', 'Camila Tapia', 'Andrés Reyes', 'Javiera López', 'Felipe Castro', 'Constanza Díaz', 'Matías Araya', 'Francisca Vera', 'Sebastián Morales', 'Catalina Fuentes', 'Tomás Herrera'];
-const NOMBRES_EMP = ['AutoMotriz Chile SpA', 'Industria Química del Norte', 'Taller Mecánico El Motor', 'LabChem Soluciones', 'ServAuto Profesional', 'QuímicaPro Ltda.', 'Automotores del Valle', 'Reactivos Industriales SA'];
-const NOMBRES_DOC = ['Prof. Ana Martínez', 'Prof. Roberto Espinoza', 'Prof. Sandra Opazo', 'Prof. Jorge Villalobos', 'Prof. Marcela Bravo', 'Prof. Héctor Paredes', 'Prof. Lorena Cifuentes'];
-
-const RESPUESTAS_MOCK = {
-    'p1_b1': [
-        'Los conocimientos de diagnóstico automotriz fueron fundamentales en mi práctica. El manejo de escáner OBD-II y la interpretación de códigos de falla me permitieron resolver problemas reales desde el primer día.',
-        'Lo más útil fue la formación en análisis químico, especialmente el manejo de cromatografía y espectrofotometría. En la empresa me asignaron directamente al laboratorio de control de calidad.',
-        'Las clases de soldadura y armado de motores fueron lo que más apliqué. También los conocimientos de seguridad industrial fueron muy valorados en el taller.',
-        'El laboratorio de química analítica y el manejo de soluciones me prepararon muy bien. Lo que aprendimos sobre normativa medioambiental también fue muy relevante.',
-        'Los conocimientos de electricidad automotriz y sistemas de inyección fueron los que más usé. El profesor Espinoza nos preparó muy bien en esos temas.',
-    ],
-    'p1_b2': [
-        'Me faltó formación en vehículos eléctricos e híbridos. En la empresa ya están llegando muchos y no sabía cómo abordarlos. También me faltó inglés técnico para leer manuales.',
-        'Faltó más práctica con equipos industriales de última generación. El laboratorio del liceo tiene equipos antiguos que no se usan en la industria actual.',
-        'Necesité más conocimientos de electrónica moderna y programación de ECU. La tecnología avanza muy rápido y lo que aprendimos ya está desactualizado.',
-        'Me faltó manejo de software de gestión de laboratorio (LIMS) que usan todas las empresas grandes. También manejo de Excel avanzado para análisis de datos.',
-    ],
-    'p1_c1': [
-        'Las clases prácticas en el taller fueron lo mejor. Cuando el profesor nos dejaba trabajar con autos reales aprendíamos mucho más que con la teoría. Los proyectos grupales también ayudaron bastante.',
-        'Los laboratorios prácticos eran excelentes. Cuando podíamos hacer experimentos reales y no solo ver presentaciones, la diferencia en aprendizaje era enorme.',
-        'El método de aprender haciendo fue lo más efectivo. Las pasantías cortas que organizaron antes de la práctica formal nos dieron mucha confianza.',
-    ],
-    'p1_g1': [
-        'El trabajo en equipo fue la habilidad más importante. En el taller siempre trabajamos con otros mecánicos y hay que coordinarse bien. También la resolución de problemas, porque cada auto tiene una falla distinta.',
-        'El pensamiento crítico y la capacidad de análisis fueron fundamentales para mi trabajo en el laboratorio. También la comunicación, porque hay que explicar resultados complejos de forma simple.',
-    ],
-    'p2_e1': [
-        'Necesité más orientación sobre opciones de práctica. Nadie me explicó bien cómo buscar empresa y cuando me quise inscribir ya no quedaban cupos.',
-        'Me hubiera gustado que el liceo tuviera un programa de apoyo para quienes no encontramos práctica. Me sentí muy solo en el proceso.',
-        'Necesitaba apoyo económico para movilización. Las empresas que ofrecían práctica estaban lejos y no tenía cómo llegar. También necesitaba orientación vocacional.',
-    ],
-    'p2_g1': [
-        'Sugiero que el liceo tenga convenios con más empresas para asegurar cupos de práctica para todos. También sería bueno tener un portal donde se publiquen las ofertas.',
-        'Deberían hacer ferias de empresas en el liceo, como hacen en otros establecimientos. Así los estudiantes pueden conocer las opciones antes de egresar.',
-        'Sería muy útil que hubiera apoyo psicológico para quienes no logramos hacer la práctica. Es muy frustrante y afecta la autoestima.',
-    ],
-    'p3_b1': [
-        'Los practicantes del Liceo María Elena llegan con buena formación técnica base. Son responsables y puntuales, lo que es difícil de encontrar. Tienen buena disposición a aprender.',
-        'Destacamos la formación en seguridad industrial y el manejo de protocolos de laboratorio. Los egresados del liceo siguen bien las normas de seguridad.',
-        'La actitud de los practicantes es excelente. Llegan con ganas de aprender y se adaptan rápido al equipo. La formación en trabajo en equipo se nota.',
-    ],
-    'p3_b2': [
-        'Les falta autonomía para tomar decisiones. Siempre esperan que se les diga qué hacer. También necesitan mejorar la comunicación escrita, especialmente en informes técnicos.',
-        'La principal debilidad es la falta de manejo de software especializado. En diagnóstico automotriz se usa mucho software que no conocen. También les cuesta el inglés técnico.',
-        'Les falta capacidad de resolver problemas complejos sin supervisión. La formación es buena en lo básico pero se quedan cortos en situaciones no estándar.',
-    ],
-    'p3_d1': [
-        'Manejo de tecnología digital aplicada al rubro. Los egresados no manejan bien las herramientas de diagnóstico computarizado ni los sistemas de gestión de mantenimiento.',
-        'Competencias blandas como la comunicación efectiva con clientes y la gestión del tiempo. También les falta pensamiento crítico para analizar resultados anómalos.',
-    ],
-    'p3_i1': [
-        'Recomendamos actualizar los equipos del taller mecánico. Los alumnos llegan sabiendo trabajar con herramientas antiguas pero la industria ya migró a tecnología de punta.',
-        'Sería muy beneficioso que los profesores hicieran pasantías en la industria para actualizar sus conocimientos. La brecha entre lo que enseñan y lo que usamos es grande.',
-        'Sugerimos incorporar más horas de práctica con software especializado del rubro. También más formación en habilidades blandas y comunicación profesional.',
-    ],
-    'p4_b1': [
-        'Es urgente incorporar contenidos sobre vehículos eléctricos e híbridos. La industria automotriz está cambiando rápidamente y nuestros egresados no están preparados.',
-        'Hay que actualizar los contenidos de análisis instrumental. La cromatografía HPLC y la espectroscopia de masas son estándar en la industria y no lo estamos enseñando.',
-        'Se debería incorporar formación en inteligencia artificial aplicada al rubro. Los sistemas de diagnóstico ya usan IA y nuestros alumnos deben conocerla.',
-        'Contenidos de sustentabilidad y economía circular son cada vez más relevantes. Las empresas los piden y no los estamos formando en eso.',
-    ],
-    'p4_b2': [
-        'Los contenidos de carburación están obsoletos. Ningún vehículo nuevo usa carburador. Ese tiempo debería usarse para enseñar inyección electrónica moderna.',
-        'La calibración manual de instrumentos analíticos ya casi no se usa. Todo es digital y automatizado. Deberíamos reemplazar esas horas con manejo de software.',
-        'Los módulos de mecánica diesel convencional ocupan demasiadas horas. Los motores modernos son mucho más electrónicos y eso no lo cubrimos bien.',
-    ],
-    'p4_c1': [
-        'El principal obstáculo es la falta de equipamiento actualizado. No podemos enseñar diagnóstico computarizado si no tenemos escáneres modernos.',
-        'La carga horaria no permite innovar. Estamos tan apretados con el currículum obligatorio que no queda tiempo para proyectos innovadores o metodologías activas.',
-        'Falta capacitación docente en metodologías innovadoras. Muchos colegas llevan años enseñando de la misma forma y no hay incentivos para cambiar.',
-    ],
-    'p4_f1': [
-        'Usamos proyectos integradores donde los alumnos deben trabajar en equipo para resolver un problema real. Esto desarrolla comunicación, colaboración y resolución de conflictos.',
-        'Implementamos una metodología de "taller simulado" donde rotamos roles (líder, operador, inspector de calidad) para que desarrollen diferentes competencias transversales.',
-    ],
-    'p4_f2': [
-        'Para el pensamiento crítico usamos casos de estudio reales de fallas mecánicas/químicas. Los alumnos deben analizar la información y proponer soluciones.',
-        'La creatividad la trabajamos con desafíos de innovación donde deben mejorar un proceso o diseñar una solución con recursos limitados. Funciona muy bien.',
-    ],
-    'p4_g1': [
-        'Para Mecánica: escáneres OBD-II de última generación, software de diagnóstico Mitchell y equipos de medición electrónica. Para Química: HPLC básico y software de análisis como ChromLab.',
-        'Se necesita implementar simuladores digitales de procesos industriales. Existen opciones gratuitas y de bajo costo que podríamos adoptar inmediatamente.',
-        'Incorporar tablets o notebooks para trabajo en terreno. Los técnicos modernos usan dispositivos móviles para diagnóstico y registro, y nuestros alumnos no lo practican.',
-    ],
-    'p4_h1': [
-        'Fortalecer el vínculo con las empresas receptoras. Necesitamos más convenios y que las empresas participen en la formación, no solo en la práctica.',
-        'Crear un programa de seguimiento de egresados que genere datos para mejorar la formación. Este proyecto es un buen paso en esa dirección.',
-        'Organizar ferias de empleo semestrales con empresas del rubro. También sería útil un portal web donde egresados y empresas puedan conectarse.',
-    ],
-    'p4_j1': [
-        'Lo más urgente es renovar los equipos del taller de mecánica. Los elevadores tienen más de 15 años y los multímetros fallan constantemente. Necesitamos osciloscopios automotrices.',
-        'El laboratorio de química necesita campanas de extracción nuevas y reactivos de calidad. También necesitamos balanzas analíticas calibradas y un espectrofotómetro moderno.',
-        'Inversión en infraestructura digital: red WiFi estable, computadores para el taller con software de diagnóstico, y una impresora 3D para prototipado.',
-    ],
-};
-
-// Generate flat response list
-let allResponses = [];
-let idCounter = 1;
-PREGUNTAS.forEach(p => {
-    const textos = RESPUESTAS_MOCK[p.id] || [];
-    textos.forEach(texto => {
-        let nombreRespondente, especialidad, cohorte;
-
-        if (p.audiencia === 'egr_practica' || p.audiencia === 'egr_sin') {
-            nombreRespondente = NOMBRES_EGR[Math.floor(Math.random() * NOMBRES_EGR.length)];
-            especialidad = ESPECIALIDADES[Math.floor(Math.random() * 2)];
-            cohorte = COHORTES[Math.floor(Math.random() * COHORTES.length)];
-        } else if (p.audiencia === 'empresas') {
-            nombreRespondente = NOMBRES_EMP[Math.floor(Math.random() * NOMBRES_EMP.length)];
-            especialidad = ESPECIALIDADES[Math.floor(Math.random() * 2)];
-            cohorte = COHORTES[Math.floor(Math.random() * COHORTES.length)];
-        } else {
-            nombreRespondente = NOMBRES_DOC[Math.floor(Math.random() * NOMBRES_DOC.length)];
-            especialidad = ESPECIALIDADES[Math.floor(Math.random() * 2)];
-            cohorte = '—';
-        }
-
-        allResponses.push({
-            id: idCounter++,
-            respondente: nombreRespondente,
-            audiencia: p.audiencia,
-            audienciaLabel: AUDIENCIA_MAP[p.audiencia],
-            encuesta: p.encuesta,
-            preguntaId: p.id,
-            preguntaLabel: p.label,
-            seccion: p.seccion,
-            especialidad: especialidad,
-            cohorte: cohorte,
-            texto: texto,
-            palabras: texto.split(/\s+/).length,
-        });
-    });
-});
+// Mock responses removed for real GAS implementation
 
 // ==================== STATE ====================
-let filteredResponses = [...allResponses];
+let allResponses = [];
+let filteredResponses = [];
 let currentPage = 1;
 const perPage = 10;
 let selectedResponse = null;
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
-    updateKPIs();
+    initListeners();
+    loadExternalData();
+});
+
+function loadExternalData() {
+    // Show loader
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.remove('hidden');
+    
+    // Call server function if in Apps Script environment
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+            .withSuccessHandler(onDataLoaded)
+            .withFailureHandler(onDataError)
+            .getRespuestasAbiertas();
+    } else {
+        // Fallback or warning if opened locally without GAS
+        onDataError(new Error("No se detectó el entorno de Google Apps Script."));
+    }
+}
+
+function onDataLoaded(response) {
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.add('hidden');
+    
+    if(!response.success) {
+        alert("Error cargando datos: " + response.error);
+        return;
+    }
+    
+    // Enriquecer datos devueltos
+    allResponses = response.data.map(r => {
+        r.audienciaLabel = AUDIENCIA_MAP[r.audiencia] || r.audiencia;
+        return r;
+    });
+    
     applyFilters();
+    updateKPIs();
     renderTable();
     renderPagination();
-    initListeners();
-});
+    updateFilterStatus();
+}
+
+function onDataError(error) {
+    const loader = document.getElementById('loader');
+    if (loader) loader.classList.add('hidden');
+    console.error(error);
+    alert("Error de conexión con el servidor interno: " + error.message);
+}
 
 // ==================== LISTENERS ====================
 function initListeners() {
@@ -229,11 +139,12 @@ function initListeners() {
         }, 300);
     });
 
-    // Refresh button animation
+    // Refresh button animation & functionality
     document.getElementById('btnRefresh').addEventListener('click', () => {
         const btn = document.getElementById('btnRefresh');
         btn.querySelector('i').style.animation = 'spin 0.6s linear';
         setTimeout(() => btn.querySelector('i').style.animation = '', 600);
+        loadExternalData();
     });
 
     // Export button
@@ -442,3 +353,4 @@ window.goToPage = goToPage;
 const style = document.createElement('style');
 style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
 document.head.appendChild(style);
+</script>

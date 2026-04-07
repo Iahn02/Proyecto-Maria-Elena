@@ -31,6 +31,17 @@ function crearFormularioEmpresas() {
     .setTitle("SECCIÓN A: REGISTRO Y DATOS DE LA EMPRESA");
 
   form
+    .addMultipleChoiceItem()
+    .setTitle("Periodo de aplicación (Uso interno)")
+    .setChoiceValues([
+      "Piloto 2025",
+      "Semestre 1 - 2026",
+      "Semestre 2 - 2026",
+      "Semestre 1 - 2027"
+    ])
+    .setRequired(true);
+
+  form
     .addTextItem()
     .setTitle("1. Nombre de la Empresa o Institución")
     .setRequired(true);

@@ -19,6 +19,16 @@ function crearFormularioEgresadosSinPractica() {
   // ***************************************************************
   form.addSectionHeaderItem().setTitle('SECCIÓN A: DATOS GENERALES');
   
+  form.addMultipleChoiceItem()
+      .setTitle('Periodo de aplicación (Uso interno)')
+      .setChoiceValues([
+        'Piloto 2025',
+        'Semestre 1 - 2026',
+        'Semestre 2 - 2026',
+        'Semestre 1 - 2027'
+      ])
+      .setRequired(true);
+
   form.addTextItem().setTitle('1. Nombre completo').setRequired(true);
   form.addTextItem().setTitle('2. Edad (en años)').setRequired(true);
   
