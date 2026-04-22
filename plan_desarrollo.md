@@ -40,8 +40,9 @@
 
 ---
 
-### 📊 FASE 3 — Dashboard Looker Studio (Semanas 3–5)
+### 📊 FASE 3 — Dashboard Looker Studio (Semanas 3–5) [80%]
 **18 Mar – 7 Abr**
+*(Estado: Funcional, falta mejorar los diseños)*
 
 > [!IMPORTANT]
 > Este es el **primer hito de pago (50% = $1.000.000 CLP)**.
@@ -109,7 +110,7 @@
 - [x] Fase 2: Formulario 2: Egresados sin Práctica — 7 secciones programadas (S2-S3)
 - [x] Fase 2: Formulario 3: Empresas Receptoras — 9 secciones lógicas (S2-S3)
 - [x] Fase 2: Formulario 4: Docentes EMTP — 11 secciones parametrizadas (S3)
-- [ ] Fase 3: Dashboard Looker Studio — 5 páginas de reporte integradas 🔴 *Hito de Pago* (S3-S5)
+- [ ] Fase 3 [80%]: Dashboard Looker Studio — 5 páginas de reporte integradas (Funcional, falta mejorar diseños) 🔴 *Hito de Pago* (S3-S5)
 - [ ] Fase 4: Interfaz web corporativa de análisis cualitativo (S5-S6)
 - [ ] Fase 5: Landing Page centralizadora montada en Apps Script (S6-S7)
 - [ ] Fase 5: Espacio logueador de Actas de Revisión configurado (S6-S7)

@@ -149,7 +149,86 @@ function initListeners() {
 
     // Export button
     document.getElementById('btnExport').addEventListener('click', () => {
-        alert('En producción, esto exportaría las respuestas filtradas a un archivo CSV descargable.');
+        const btn  = document.getElementById('btnExport');
+        const icon = btn.querySelector('i');
+        const originalIconClass = icon.className;
+
+        // Recoger filtros activos (igual que applyFilters)
+        const filtros = {
+            audiencia:    document.getElementById('filterAudiencia').value,
+            pregunta:     document.getElementById('filterPregunta').value,
+            especialidad: document.getElementById('filterEspecialidad').value,
+            cohorte:      document.getElementById('filterCohorte').value,
+            search:       document.getElementById('searchInput').value
+        };
+
+        // ── Helper: dispara la descarga del CSV en el navegador ──────────────
+        function descargarCSV(csvString) {
+            const fecha = new Date().toISOString().slice(0, 10);
+            const bom   = '\uFEFF';   // BOM UTF-8 → Excel lo abre correctamente
+            const blob  = new Blob([bom + csvString], { type: 'text/csv;charset=utf-8;' });
+            const url   = URL.createObjectURL(blob);
+            const a     = document.createElement('a');
+            a.href     = url;
+            a.download = `respuestas_cualitativas_${fecha}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ── Helper: genera CSV desde filteredResponses (fallback sin GAS) ───
+        function csvDesdeFrontend() {
+            function cell(val) {
+                if (val === null || val === undefined) return '';
+                const s = val.toString();
+                return (s.includes(',') || s.includes('"') || s.includes('\n'))
+                    ? '"' + s.replace(/"/g, '""') + '"' : s;
+            }
+            const headers = [
+                'ID','ID_Respuesta','Encuesta','Audiencia',
+                'Seccion','Pregunta','Especialidad','Cohorte',
+                'Respondente','Palabras','Respuesta'
+            ].join(',');
+            const rows = filteredResponses.map(r => [
+                r.id, r.id_respuesta, r.encuesta, r.audiencia,
+                r.seccion, r.preguntaLabel, r.especialidad, r.cohorte,
+                r.respondente, r.palabras, r.texto
+            ].map(cell).join(','));
+            return [headers, ...rows].join('\r\n');
+        }
+
+        // Estado de carga
+        icon.className = 'fas fa-spinner fa-spin';
+        btn.disabled   = true;
+
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+            google.script.run
+                .withSuccessHandler(resp => {
+                    icon.className = originalIconClass;
+                    btn.disabled   = false;
+                    if (!resp.success) {
+                        alert('Error al exportar: ' + resp.error);
+                        return;
+                    }
+                    descargarCSV(resp.csv);
+                })
+                .withFailureHandler(err => {
+                    icon.className = originalIconClass;
+                    btn.disabled   = false;
+                    alert('Error al generar el CSV: ' + (err.message || err));
+                })
+                .exportarCSV(filtros);
+        } else {
+            // Entorno local sin GAS: generar desde datos en memoria
+            icon.className = originalIconClass;
+            btn.disabled   = false;
+            if (filteredResponses.length === 0) {
+                alert('No hay respuestas para exportar con los filtros actuales.');
+                return;
+            }
+            descargarCSV(csvDesdeFrontend());
+        }
     });
 }
 
@@ -163,7 +242,7 @@ function applyFilters() {
 
     filteredResponses = allResponses.filter(r => {
         if (audiencia !== 'all' && r.audiencia !== audiencia) return false;
-        if (pregunta !== 'all' && r.preguntaId !== pregunta) return false;
+        if (pregunta !== 'all' && r.preguntaLabel !== pregunta) return false;
         if (especialidad !== 'all') {
             const espMap = { 'mecanica': 'Mecánica Automotriz', 'quimica': 'Química Industrial' };
             if (r.especialidad !== espMap[especialidad]) return false;
