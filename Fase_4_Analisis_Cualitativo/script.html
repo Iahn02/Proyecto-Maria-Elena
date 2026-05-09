@@ -242,7 +242,7 @@ function applyFilters() {
 
     filteredResponses = allResponses.filter(r => {
         if (audiencia !== 'all' && r.audiencia !== audiencia) return false;
-        if (pregunta !== 'all' && r.preguntaLabel !== pregunta) return false;
+        if (pregunta !== 'all' && r.preguntaId !== pregunta) return false;
         if (especialidad !== 'all') {
             const espMap = { 'mecanica': 'Mecánica Automotriz', 'quimica': 'Química Industrial' };
             if (r.especialidad !== espMap[especialidad]) return false;

@@ -3,410 +3,954 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Egresados — Liceo María Elena · Looker Studio</title>
-    <meta name="description" content="Dashboard de seguimiento de egresados EMTP del Liceo María Elena. Visualización de trayectorias educativas, inserción laboral, análisis por cohorte y equidad.">
-    <link rel="stylesheet" href="style.css">
+    <title>Portal · Sistema de Seguimiento de Egresados — Liceo María Elena</title>
+    <meta name="description" content="Portal central del Sistema de Seguimiento de Egresados EMTP del Liceo María Elena · Fundación Chile. Acceso a encuestas, dashboard y análisis.">
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<style>
+/* ============================================
+   Portal Central — Liceo María Elena
+   Fase 5 · Fundación Chile
+   ============================================ */
+
+:root {
+    --g-blue:   #4285F4;
+    --g-green:  #34A853;
+    --g-yellow: #FBBC05;
+    --g-red:    #EA4335;
+    --blue-50:  #e8f0fe; --blue-600: #1a73e8; --blue-700: #1557b0;
+    --green-50: #e6f4ea; --green-600: #1e8e3e;
+    --purple-50:#f3e8fd; --purple-600:#9334e6;
+    --orange-50:#fef7e0; --orange-600:#e37400;
+    --teal-50:  #e0f7fa; --teal-600: #00897b;
+    --bg:       #f0f2f5;
+    --surface:  #ffffff;
+    --border:   #dadce0;
+    --text:     #202124;
+    --muted:    #5f6368;
+    --light:    #80868b;
+    --hover:    #f1f3f4;
+    --shadow:   0 1px 2px rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    --shadow-lg:0 1px 3px rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+    --radius:   10px;
+    --font:     'Inter','Google Sans','Roboto',system-ui,sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:14px;scroll-behavior:smooth;}
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+a{text-decoration:none;color:inherit;}
+
+/* ── TOPBAR ── */
+.topbar{
+    height:52px;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    position:sticky;
+    top:0;
+    z-index:300;
+    gap:16px;
+}
+.topbar-brand{display:flex;align-items:center;gap:10px;}
+.topbar-icon{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(135deg,var(--g-blue),var(--blue-700));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:.85rem;flex-shrink:0;
+}
+.topbar-name{font-size:.95rem;font-weight:600;color:var(--text);white-space:nowrap;}
+.topbar-subtitle{font-size:.72rem;color:var(--light);}
+.topbar-nav{display:flex;align-items:center;gap:4px;}
+.topbar-nav a{
+    padding:6px 14px;border-radius:20px;
+    font-size:.82rem;font-weight:500;color:var(--muted);
+    transition:background .15s,color .15s;
+}
+.topbar-nav a:hover{background:var(--hover);color:var(--blue-600);}
+.topbar-badge{
+    background:var(--blue-50);color:var(--blue-600);
+    font-size:.65rem;font-weight:700;padding:2px 8px;
+    border-radius:10px;text-transform:uppercase;letter-spacing:.04em;
+}
+
+/* ── HERO ── */
+.hero{
+    background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);
+    color:#fff;
+    padding:52px 24px 48px;
+    text-align:center;
+}
+.hero-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:20px;padding:4px 14px;
+    font-size:.75rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.06em;
+    margin-bottom:18px;
+}
+.hero h1{font-size:2rem;font-weight:700;line-height:1.25;margin-bottom:10px;}
+.hero p{font-size:1rem;opacity:.88;max-width:580px;margin:0 auto 28px;line-height:1.6;}
+.hero-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;}
+.hero-pill{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:20px;padding:5px 14px;
+    font-size:.78rem;font-weight:500;
+    display:flex;align-items:center;gap:6px;
+}
+
+/* ── MAIN ── */
+main{flex:1;padding:32px 24px 48px;max-width:1200px;margin:0 auto;width:100%;}
+
+/* ── SECTION ── */
+.section{margin-bottom:40px;}
+.section-header{margin-bottom:18px;}
+.section-header h2{font-size:1.15rem;font-weight:700;color:var(--text);}
+.section-header p{font-size:.82rem;color:var(--muted);margin-top:2px;}
+.section-header-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+/* ── ENCUESTAS GRID ── */
+.enc-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:14px;
+}
+.enc-card{
+    background:var(--surface);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:22px;
+    display:flex;flex-direction:column;gap:12px;
+    border-top:4px solid var(--border);
+    transition:box-shadow .2s,transform .2s;
+    cursor:pointer;
+}
+.enc-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.enc-card.enc-1{border-top-color:var(--g-blue);}
+.enc-card.enc-2{border-top-color:var(--orange-600);}
+.enc-card.enc-3{border-top-color:var(--g-green);}
+.enc-card.enc-4{border-top-color:var(--purple-600);}
+
+.enc-icon{
+    width:42px;height:42px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;flex-shrink:0;
+}
+.enc-1 .enc-icon{background:var(--blue-50);color:var(--blue-600);}
+.enc-2 .enc-icon{background:var(--orange-50);color:var(--orange-600);}
+.enc-3 .enc-icon{background:var(--green-50);color:var(--green-600);}
+.enc-4 .enc-icon{background:var(--purple-50);color:var(--purple-600);}
+
+.enc-tag{
+    font-size:.65rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.05em;
+    color:var(--light);margin-bottom:2px;
+}
+.enc-card h3{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.3;}
+.enc-card p{font-size:.78rem;color:var(--muted);line-height:1.5;flex:1;}
+.enc-meta{display:flex;align-items:center;justify-content:space-between;}
+.enc-secciones{font-size:.72rem;color:var(--light);}
+.enc-btn{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:6px 14px;border-radius:20px;
+    font-size:.78rem;font-weight:600;
+    border:1px solid var(--border);color:var(--muted);
+    transition:all .15s;background:var(--surface);cursor:pointer;
+}
+.enc-btn:hover{background:var(--blue-50);border-color:var(--g-blue);color:var(--blue-600);}
+.enc-card a{display:block;}
+
+/* ── HERRAMIENTAS GRID ── */
+.tools-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:14px;
+}
+.tool-card{
+    background:var(--surface);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:26px;
+    display:flex;flex-direction:column;gap:14px;
+    transition:box-shadow .2s,transform .2s;cursor:pointer;
+}
+.tool-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+.tool-header{display:flex;align-items:center;gap:14px;}
+.tool-icon{
+    width:52px;height:52px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;flex-shrink:0;
+}
+.tool-icon.looker{background:linear-gradient(135deg,#e8f0fe,#d2e3fc);color:var(--blue-600);}
+.tool-icon.cualitativo{background:linear-gradient(135deg,#f3e8fd,#e6d0fb);color:var(--purple-600);}
+.tool-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--light);margin-bottom:2px;}
+.tool-card h3{font-size:1.05rem;font-weight:700;color:var(--text);}
+.tool-card p{font-size:.82rem;color:var(--muted);line-height:1.55;}
+.tool-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{
+    background:var(--hover);border:1px solid var(--border);
+    border-radius:12px;padding:3px 10px;
+    font-size:.68rem;font-weight:600;color:var(--muted);
+}
+.tool-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:9px 20px;border-radius:6px;
+    font-size:.82rem;font-weight:600;
+    transition:all .15s;align-self:flex-start;
+}
+.tool-cta.blue{background:var(--blue-600);color:#fff;}
+.tool-cta.blue:hover{background:var(--blue-700);}
+.tool-cta.purple{background:var(--purple-600);color:#fff;}
+.tool-cta.purple:hover{background:#7c2dc9;}
+
+/* ── ACTAS ── */
+.actas-toolbar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    margin-bottom:14px;
+}
+.btn-nueva-acta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 18px;border-radius:6px;
+    background:var(--blue-600);color:#fff;
+    font-size:.82rem;font-weight:600;border:none;cursor:pointer;
+    transition:background .15s;
+}
+.btn-nueva-acta:hover{background:var(--blue-700);}
+.actas-link-sheets{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;border-radius:6px;
+    border:1px solid var(--border);color:var(--muted);
+    font-size:.82rem;font-weight:500;
+    transition:all .15s;background:var(--surface);cursor:pointer;
+}
+.actas-link-sheets:hover{background:var(--hover);border-color:var(--g-green);color:var(--green-600);}
+.actas-card{
+    background:var(--surface);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;
+}
+.actas-table-wrapper{overflow-x:auto;}
+.actas-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+.actas-table thead th{
+    background:#f8f9fa;padding:10px 14px;
+    text-align:left;font-weight:600;color:var(--muted);
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;
+    border-bottom:2px solid var(--border);white-space:nowrap;
+}
+.actas-table tbody td{
+    padding:11px 14px;border-bottom:1px solid #f1f3f4;
+    color:var(--text);vertical-align:middle;
+}
+.actas-table tbody tr:last-child td{border-bottom:none;}
+.actas-table tbody tr:hover{background:var(--hover);}
+.acta-tipo{
+    display:inline-block;padding:2px 10px;border-radius:10px;
+    font-size:.68rem;font-weight:700;white-space:nowrap;
+}
+.tipo-Coordinación{background:#e8f0fe;color:var(--blue-600);}
+.tipo-Revisión{background:#e6f4ea;color:var(--green-600);}
+.tipo-Seguimiento{background:#fef7e0;color:var(--orange-600);}
+.tipo-Emergente{background:#fce8e6;color:#d93025;}
+.acta-estado{
+    display:inline-block;padding:2px 10px;border-radius:10px;
+    font-size:.68rem;font-weight:700;
+}
+.estado-Abierta{background:#fef7e0;color:var(--orange-600);}
+.estado-Cerrada{background:#e6f4ea;color:var(--green-600);}
+.acta-doc-link{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:.75rem;color:var(--blue-600);font-weight:500;
+}
+.acta-doc-link:hover{text-decoration:underline;}
+.actas-empty{
+    padding:36px;text-align:center;color:var(--light);
+}
+.actas-empty i{font-size:2rem;color:var(--border);display:block;margin-bottom:10px;}
+.actas-empty p{font-size:.85rem;}
+.actas-static-fallback{
+    display:none;
+    padding:28px;text-align:center;
+    border-top:1px solid #f1f3f4;
+}
+.actas-static-fallback.visible{display:block;}
+
+/* ── STATUS BANNER ── */
+.status-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:12px;margin-bottom:32px;
+}
+.status-item{
+    background:var(--surface);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:14px 16px;
+    display:flex;align-items:center;gap:12px;
+}
+.status-dot{
+    width:10px;height:10px;border-radius:50%;flex-shrink:0;
+}
+.dot-green{background:#34A853;}
+.dot-yellow{background:#FBBC05;}
+.dot-gray{background:#dadce0;}
+.status-label{font-size:.75rem;font-weight:600;color:var(--muted);}
+.status-val{font-size:.78rem;color:var(--text);font-weight:500;}
+
+/* ── MODAL ── */
+.modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(32,33,36,.6);
+    display:flex;align-items:center;justify-content:center;
+    z-index:500;padding:16px;
+    opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+    background:var(--surface);border-radius:var(--radius);
+    box-shadow:0 8px 32px rgba(0,0,0,.25);
+    width:100%;max-width:560px;
+    max-height:90vh;overflow-y:auto;
+    transform:translateY(12px);transition:transform .2s;
+}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{
+    padding:18px 22px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+}
+.modal-header h3{font-size:1rem;font-weight:700;color:var(--text);}
+.modal-close{
+    width:32px;height:32px;border:none;background:transparent;
+    border-radius:50%;cursor:pointer;color:var(--muted);
+    font-size:.95rem;display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+}
+.modal-close:hover{background:var(--hover);}
+.modal-body{padding:20px 22px;}
+.form-group{margin-bottom:14px;}
+.form-group label{
+    display:block;font-size:.75rem;font-weight:600;
+    color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;
+    font-family:var(--font);font-size:.85rem;color:var(--text);
+    background:var(--surface);outline:none;transition:border-color .15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--g-blue);}
+.form-group textarea{resize:vertical;min-height:80px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-footer{
+    padding:14px 22px;border-top:1px solid var(--border);
+    display:flex;justify-content:flex-end;gap:10px;
+}
+.btn-cancel{
+    padding:8px 18px;border-radius:6px;border:1px solid var(--border);
+    background:var(--surface);color:var(--muted);
+    font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;
+}
+.btn-cancel:hover{background:var(--hover);}
+.btn-submit{
+    padding:8px 20px;border-radius:6px;border:none;
+    background:var(--blue-600);color:#fff;
+    font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s;
+    display:inline-flex;align-items:center;gap:6px;
+}
+.btn-submit:hover{background:var(--blue-700);}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;}
+
+/* ── TOAST ── */
+.toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:#202124;color:#fff;padding:10px 22px;border-radius:6px;
+    font-size:.82rem;font-weight:500;opacity:0;transition:all .3s;
+    z-index:600;white-space:nowrap;
+}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── FOOTER ── */
+.site-footer{
+    padding:18px 24px;border-top:1px solid var(--border);
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:8px;
+    font-size:.72rem;color:var(--light);
+    margin-top:auto;
+}
+.footer-links{display:flex;gap:14px;}
+.footer-links a{color:var(--light);transition:color .15s;}
+.footer-links a:hover{color:var(--blue-600);}
+
+/* ── LOADER ── */
+.loader{
+    position:fixed;inset:0;background:rgba(255,255,255,.88);
+    display:flex;align-items:center;justify-content:center;
+    z-index:400;backdrop-filter:blur(2px);
+}
+.loader.hidden{display:none;}
+.spinner{
+    width:36px;height:36px;border:4px solid #d2e3fc;
+    border-top-color:var(--g-blue);border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+    .topbar-nav{display:none;}
+    .hero h1{font-size:1.5rem;}
+    .hero p{font-size:.9rem;}
+    .form-row{grid-template-columns:1fr;}
+    .section-header-row{flex-direction:column;align-items:flex-start;}
+}
+@media(max-width:480px){
+    .hero{padding:36px 16px 32px;}
+    main{padding:20px 14px 40px;}
+    .topbar{padding:0 14px;}
+    .tools-grid{grid-template-columns:1fr;}
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#dadce0;border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:#bdc1c6;}
+</style>
 </head>
 <body>
-    <!-- Looker Studio Top Bar -->
-    <header class="looker-topbar">
-        <div class="looker-brand">
-            <svg class="looker-logo" viewBox="0 0 24 24" width="28" height="28">
-                <path fill="#4285F4" d="M22.56 12.25c0-.67-.06-1.3-.17-1.92H12v3.64h5.92a5.06 5.06 0 0 1-2.19 3.32v2.76h3.55c2.08-1.91 3.28-4.73 3.28-7.8z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.76c-.98.66-2.23 1.06-3.73 1.06-2.87 0-5.3-1.94-6.16-4.54H2.18v2.84A10.98 10.98 0 0 0 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18A10.98 10.98 0 0 0 1 12c0 1.78.42 3.46 1.18 4.94l3.66-2.84z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.86-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span class="brand-text">Looker Studio</span>
-        </div>
-        <div class="report-title">
-            <h1 id="reportTitle">Seguimiento de Egresados EMTP — Liceo María Elena</h1>
-        </div>
-        <div class="looker-actions">
-            <button class="looker-btn" id="btnShare" title="Compartir"><i class="fas fa-share-alt"></i></button>
-            <button class="looker-btn" id="btnEdit" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-            <button class="looker-btn looker-btn-more" id="btnMore" title="Más opciones"><i class="fas fa-ellipsis-v"></i></button>
-            <div class="user-avatar" title="Fundación Chile">
-                <span>FC</span>
-            </div>
-        </div>
-    </header>
 
-    <!-- Page Tabs (Looker Studio navigation) -->
-    <nav class="page-tabs" id="pageTabs">
-        <button class="page-tab active" data-page="overview">
-            <i class="fas fa-chart-line"></i> Visión General
-        </button>
-        <button class="page-tab" data-page="trayectorias">
-            <i class="fas fa-graduation-cap"></i> Trayectorias Educativas
-        </button>
-        <button class="page-tab" data-page="insercion">
-            <i class="fas fa-briefcase"></i> Inserción Laboral
-        </button>
-        <button class="page-tab" data-page="cohorte">
-            <i class="fas fa-layer-group"></i> Análisis por Cohorte
-        </button>
-        <button class="page-tab" data-page="demograficos">
-            <i class="fas fa-hand-holding-heart"></i> Datos Demográficos y Equidad
-        </button>
+<!-- ======== TOPBAR ======== -->
+<header class="topbar">
+    <div class="topbar-brand">
+        <div class="topbar-icon"><i class="fas fa-user-graduate"></i></div>
+        <div>
+            <div class="topbar-name">Liceo María Elena</div>
+            <div class="topbar-subtitle">Sistema de Seguimiento de Egresados · Fundación Chile</div>
+        </div>
+    </div>
+    <nav class="topbar-nav">
+        <a href="#encuestas">Encuestas</a>
+        <a href="#herramientas">Herramientas</a>
+        <a href="#actas">Actas</a>
     </nav>
+    <span class="topbar-badge">Portal Central</span>
+</header>
 
-    <!-- Filter Bar -->
-    <div class="filter-bar">
-        <div class="filter-group">
-            <label>Especialidad</label>
-            <select id="filterEspecialidad">
-                <option value="all" selected>Todas</option>
-                <option value="mecanica">Mecánica Automotriz</option>
-                <option value="quimica">Química Industrial</option>
-            </select>
+<!-- ======== HERO ======== -->
+<div class="hero">
+    <div class="hero-tag"><i class="fas fa-graduation-cap"></i> EMTP · Educación Media Técnico-Profesional</div>
+    <h1>Sistema de Seguimiento<br>de Egresados</h1>
+    <p>Portal unificado para el acceso a encuestas, análisis de datos cuantitativos, respuestas abiertas y registro de actas de reunión.</p>
+    <div class="hero-pills">
+        <span class="hero-pill"><i class="fas fa-clipboard-list"></i> 4 Encuestas</span>
+        <span class="hero-pill"><i class="fas fa-chart-bar"></i> Dashboard Looker Studio</span>
+        <span class="hero-pill"><i class="fas fa-flask"></i> Análisis Cualitativo</span>
+        <span class="hero-pill"><i class="fas fa-file-alt"></i> Sistema de Actas</span>
+    </div>
+</div>
+
+<!-- ======== MAIN ======== -->
+<main>
+
+    <!-- Estado del Sistema -->
+    <div class="status-grid" id="statusGrid">
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Encuesta 1 — Egresados con Práctica</div><div class="status-val" id="st-enc1">Disponible</div></div>
         </div>
-        <div class="filter-group">
-            <label>Cohorte</label>
-            <select id="filterCohorte">
-                <option value="all" selected>Todas</option>
-                <option value="2025">2025</option>
-                <option value="2024" selected>2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-            </select>
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Encuesta 2 — Egresados sin Práctica</div><div class="status-val" id="st-enc2">Disponible</div></div>
         </div>
-        <div class="filter-group">
-            <label>Audiencia</label>
-            <select id="filterAudiencia">
-                <option value="all" selected>Todas</option>
-                <option value="egr_practica">Egresados con Práctica</option>
-                <option value="egr_sin">Egresados sin Práctica</option>
-                <option value="empresas">Empresas Receptoras</option>
-                <option value="docentes">Docentes EMTP</option>
-            </select>
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Encuesta 3 — Empresas Receptoras</div><div class="status-val" id="st-enc3">Disponible</div></div>
         </div>
-        <div class="filter-applied" id="filterCount">
-            <i class="fas fa-filter"></i> <span>Sin filtros aplicados</span>
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Encuesta 4 — Docentes EMTP</div><div class="status-val" id="st-enc4">Disponible</div></div>
+        </div>
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Dashboard Looker Studio</div><div class="status-val" id="st-looker">Disponible</div></div>
+        </div>
+        <div class="status-item">
+            <div class="status-dot dot-green"></div>
+            <div><div class="status-label">Análisis Cualitativo (Web App)</div><div class="status-val" id="st-cualitativo">Disponible</div></div>
         </div>
     </div>
 
-    <!-- ================= PAGE: VISIÓN GENERAL ================= -->
-    <section class="page-content active" id="page-overview">
-        <div class="page-section-title">
-            <h2>Visión General</h2>
-            <p>Métricas principales del estudio de seguimiento de egresados — Liceo María Elena</p>
+    <!-- ── SECCIÓN: ENCUESTAS ── -->
+    <section class="section" id="encuestas">
+        <div class="section-header">
+            <h2><i class="fas fa-clipboard-list" style="color:var(--g-blue);margin-right:7px;"></i>Formularios de Encuesta</h2>
+            <p>Acceso directo a los 4 formularios activos del sistema</p>
+        </div>
+        <div class="enc-grid">
+
+            <div class="enc-card enc-1" onclick="abrirLink('enc1_practica')">
+                <div class="enc-icon"><i class="fas fa-hard-hat"></i></div>
+                <div>
+                    <div class="enc-tag">Encuesta 1</div>
+                    <h3>Egresados en Práctica Profesional</h3>
+                </div>
+                <p>Pertinencia curricular, competencias técnicas y transversales, inserción laboral y satisfacción de egresados que realizaron práctica.</p>
+                <div class="enc-meta">
+                    <span class="enc-secciones"><i class="fas fa-layer-group"></i> 12 secciones (A–L)</span>
+                    <button class="enc-btn" onclick="event.stopPropagation();abrirLink('enc1_practica')">
+                        <i class="fas fa-external-link-alt"></i> Abrir
+                    </button>
+                </div>
+            </div>
+
+            <div class="enc-card enc-2" onclick="abrirLink('enc2_sin')">
+                <div class="enc-icon"><i class="fas fa-user-clock"></i></div>
+                <div>
+                    <div class="enc-tag">Encuesta 2</div>
+                    <h3>Egresados sin Práctica Profesional</h3>
+                </div>
+                <p>Motivos de exclusión, situación actual, planes futuros, barreras y feedback directo al equipo directivo del liceo.</p>
+                <div class="enc-meta">
+                    <span class="enc-secciones"><i class="fas fa-layer-group"></i> 7 secciones (A–G)</span>
+                    <button class="enc-btn" onclick="event.stopPropagation();abrirLink('enc2_sin')">
+                        <i class="fas fa-external-link-alt"></i> Abrir
+                    </button>
+                </div>
+            </div>
+
+            <div class="enc-card enc-3" onclick="abrirLink('enc3_empresas')">
+                <div class="enc-icon"><i class="fas fa-building"></i></div>
+                <div>
+                    <div class="enc-tag">Encuesta 3</div>
+                    <h3>Empresas Receptoras de Práctica</h3>
+                </div>
+                <p>Evaluación de competencias del practicante, vínculo institucional, inserción laboral post-práctica y satisfacción empresarial.</p>
+                <div class="enc-meta">
+                    <span class="enc-secciones"><i class="fas fa-layer-group"></i> 9 secciones (A–I)</span>
+                    <button class="enc-btn" onclick="event.stopPropagation();abrirLink('enc3_empresas')">
+                        <i class="fas fa-external-link-alt"></i> Abrir
+                    </button>
+                </div>
+            </div>
+
+            <div class="enc-card enc-4" onclick="abrirLink('enc4_docentes')">
+                <div class="enc-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div>
+                    <div class="enc-tag">Encuesta 4</div>
+                    <h3>Docentes EMTP</h3>
+                </div>
+                <p>Pertinencia curricular, metodologías, articulación con educación superior, competencias digitales y gestión institucional.</p>
+                <div class="enc-meta">
+                    <span class="enc-secciones"><i class="fas fa-layer-group"></i> 11 secciones (A–K)</span>
+                    <button class="enc-btn" onclick="event.stopPropagation();abrirLink('enc4_docentes')">
+                        <i class="fas fa-external-link-alt"></i> Abrir
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── SECCIÓN: HERRAMIENTAS ── -->
+    <section class="section" id="herramientas">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-line" style="color:var(--g-blue);margin-right:7px;"></i>Herramientas de Análisis</h2>
+            <p>Visualización de datos cuantitativos y análisis de respuestas abiertas</p>
+        </div>
+        <div class="tools-grid">
+
+            <div class="tool-card" onclick="abrirLink('looker')">
+                <div class="tool-header">
+                    <div class="tool-icon looker">
+                        <svg viewBox="0 0 24 24" width="26" height="26">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.67-.06-1.3-.17-1.92H12v3.64h5.92a5.06 5.06 0 0 1-2.19 3.32v2.76h3.55c2.08-1.91 3.28-4.73 3.28-7.8z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.76c-.98.66-2.23 1.06-3.73 1.06-2.87 0-5.3-1.94-6.16-4.54H2.18v2.84A10.98 10.98 0 0 0 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18A10.98 10.98 0 0 0 1 12c0 1.78.42 3.46 1.18 4.94l3.66-2.84z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.86-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="tool-label">Dashboard BI</div>
+                        <h3>Looker Studio</h3>
+                    </div>
+                </div>
+                <p>Dashboard interactivo de 5 páginas con KPIs de inserción laboral, trayectorias educativas, análisis por cohorte, datos demográficos y equidad.</p>
+                <div class="tool-chips">
+                    <span class="chip">Visión General</span>
+                    <span class="chip">Inserción Laboral</span>
+                    <span class="chip">Trayectorias</span>
+                    <span class="chip">Cohortes</span>
+                    <span class="chip">Equidad</span>
+                </div>
+                <a class="tool-cta blue" href="javascript:void(0)" onclick="event.stopPropagation();abrirLink('looker')">
+                    <i class="fas fa-chart-bar"></i> Abrir Dashboard
+                </a>
+            </div>
+
+            <div class="tool-card" onclick="abrirLink('cualitativo')">
+                <div class="tool-header">
+                    <div class="tool-icon cualitativo"><i class="fas fa-flask"></i></div>
+                    <div>
+                        <div class="tool-label">Web App · Análisis Cualitativo</div>
+                        <h3>Respuestas Abiertas</h3>
+                    </div>
+                </div>
+                <p>Interfaz de análisis de las 18 preguntas abiertas distribuidas en las 4 encuestas. Filtros por audiencia, pregunta, especialidad y cohorte. Exportación a CSV.</p>
+                <div class="tool-chips">
+                    <span class="chip">18 preguntas abiertas</span>
+                    <span class="chip">Búsqueda libre</span>
+                    <span class="chip">Exportar CSV</span>
+                    <span class="chip">Google Auth</span>
+                </div>
+                <a class="tool-cta purple" href="javascript:void(0)" onclick="event.stopPropagation();abrirLink('cualitativo')">
+                    <i class="fas fa-flask"></i> Abrir Web App
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ── SECCIÓN: ACTAS ── -->
+    <section class="section" id="actas">
+        <div class="section-header-row section-header">
+            <div>
+                <h2><i class="fas fa-file-alt" style="color:var(--g-blue);margin-right:7px;"></i>Sistema de Actas</h2>
+                <p>Registro de reuniones, acuerdos y compromisos del equipo</p>
+            </div>
+            <div class="actas-toolbar">
+                <button class="btn-nueva-acta" id="btnNuevaActa" onclick="abrirModal()">
+                    <i class="fas fa-plus"></i> Nueva Acta
+                </button>
+                <a class="actas-link-sheets" id="btnVerSheets" href="#" target="_blank" rel="noopener">
+                    <i class="fas fa-table"></i> Ver en Sheets
+                </a>
+            </div>
         </div>
 
-        <div class="kpi-row">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-label">Egresados Encuestados</div>
-                <div class="kpi-value" id="kpi-total">127</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> 82 con práctica · 45 sin práctica</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-label">Tasa de Inserción Laboral</div>
-                <div class="kpi-value" id="kpi-insercion">68.3%</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +5.2pp vs cohorte anterior</div>
-            </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-label">Continuidad Estudios ES</div>
-                <div class="kpi-value" id="kpi-estudios">32.5%</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +3.8pp vs cohorte anterior</div>
-            </div>
-            <div class="kpi-card kpi-orange">
-                <div class="kpi-label">NPS Satisfacción (Egresados)</div>
-                <div class="kpi-value" id="kpi-nps">+42</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +8 pts vs 2023</div>
-            </div>
-            <div class="kpi-card kpi-teal">
-                <div class="kpi-label">NPS Empresas</div>
-                <div class="kpi-value" id="kpi-nps-empresas">+55</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +12 pts vs 2023</div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card wide">
-                <div class="chart-title">Egresados encuestados por cohorte y tipo</div>
-                <div class="chart-body"><canvas id="chart-overview-trend"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Distribución por especialidad</div>
-                <div class="chart-body"><canvas id="chart-overview-especialidad"></canvas></div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-title">Situación actual de egresados</div>
-                <div class="chart-body"><canvas id="chart-overview-situacion"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Satisfacción con la formación (NPS egresados)</div>
-                <div class="chart-body"><canvas id="chart-overview-satisfaccion"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Satisfacción empresas receptoras (NPS)</div>
-                <div class="chart-body"><canvas id="chart-overview-nps-empresas"></canvas></div>
-            </div>
-        </div>
-
-        <!-- Summary table -->
-        <div class="table-card">
-            <div class="table-title">Resumen por especialidad y audiencia</div>
-            <div class="table-responsive">
-                <table id="table-overview">
+        <div class="actas-card">
+            <!-- Tabla dinámica (modo GAS) -->
+            <div class="actas-table-wrapper" id="actasTableWrapper">
+                <table class="actas-table" id="actasTable">
                     <thead>
                         <tr>
-                            <th>Especialidad</th>
-                            <th>Egr. con Práctica</th>
-                            <th>Egr. sin Práctica</th>
-                            <th>Empresas</th>
-                            <th>Tasa Inserción</th>
-                            <th>Continuidad ES</th>
-                            <th>NPS Egresados</th>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Tema Principal</th>
+                            <th>Responsable</th>
+                            <th>Estado</th>
+                            <th>Documento</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody-overview"></tbody>
+                    <tbody id="actasBody">
+                        <tr>
+                            <td colspan="6">
+                                <div class="actas-empty" id="actasEmpty">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Cargando actas...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
-        </div>
-    </section>
-
-    <!-- ================= PAGE: TRAYECTORIAS EDUCATIVAS ================= -->
-    <section class="page-content" id="page-trayectorias">
-        <div class="page-section-title">
-            <h2>Trayectorias Educativas</h2>
-            <p>Continuidad de estudios superiores, convalidaciones y carreras post-egreso</p>
-        </div>
-
-        <div class="kpi-row">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-label">Continúa en ES</div>
-                <div class="kpi-value">32.5%</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +3.8pp</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-label">ES Universitaria</div>
-                <div class="kpi-value">12.8%</div>
-                <div class="kpi-sub">16 egresados en universidades</div>
-            </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-label">ES Técnica (IP/CFT)</div>
-                <div class="kpi-value">19.7%</div>
-                <div class="kpi-sub">25 egresados en IP o CFT</div>
-            </div>
-            <div class="kpi-card kpi-orange">
-                <div class="kpi-label">Convalidaciones Logradas</div>
-                <div class="kpi-value">64.3%</div>
-                <div class="kpi-sub">27 de 42 que solicitaron</div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card wide">
-                <div class="chart-title">Tipo de educación superior por especialidad</div>
-                <div class="chart-body"><canvas id="chart-tray-tipo"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">% que continúa en ES (universitaria vs técnica)</div>
-                <div class="chart-body"><canvas id="chart-tray-nivel"></canvas></div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-title">Carreras más elegidas post-egreso</div>
-                <div class="chart-body"><canvas id="chart-tray-carreras"></canvas></div>
-            </div>
-            <div class="chart-card wide">
-                <div class="chart-title">Tasa de convalidaciones logradas por cohorte</div>
-                <div class="chart-body"><canvas id="chart-tray-convalidacion"></canvas></div>
+            <!-- Fallback estático (cuando no hay GAS) -->
+            <div class="actas-static-fallback" id="actasStaticFallback">
+                <i class="fas fa-table" style="font-size:2rem;color:var(--border);display:block;margin-bottom:10px;"></i>
+                <p style="color:var(--light);font-size:.85rem;margin-bottom:14px;">
+                    El registro de actas está disponible en Google Sheets.<br>
+                    Desde la versión desplegada como Web App se pueden ver y agregar actas directamente.
+                </p>
+                <a id="actasSheetsBtn" href="#" target="_blank" class="tool-cta blue" style="margin:0 auto;">
+                    <i class="fas fa-external-link-alt"></i> Abrir registro de Actas
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- ================= PAGE: INSERCIÓN LABORAL ================= -->
-    <section class="page-content" id="page-insercion">
-        <div class="page-section-title">
-            <h2>Inserción Laboral</h2>
-            <p>Empleo formal e informal, contratación por empresa de práctica, tiempo al empleo y visión empresas</p>
+</main>
+
+<!-- ======== FOOTER ======== -->
+<footer class="site-footer">
+    <span>Sistema de Seguimiento de Egresados · Liceo María Elena · Fundación Chile</span>
+    <div class="footer-links">
+        <a href="#encuestas">Encuestas</a>
+        <a href="#herramientas">Herramientas</a>
+        <a href="#actas">Actas</a>
+    </div>
+</footer>
+
+<!-- ======== LOADER ======== -->
+<div id="loader" class="loader hidden">
+    <div style="text-align:center;">
+        <div class="spinner" style="margin:0 auto 12px;"></div>
+        <span style="font-size:.85rem;color:var(--muted);">Cargando...</span>
+    </div>
+</div>
+
+<!-- ======== MODAL NUEVA ACTA ======== -->
+<div class="modal-overlay" id="modalOverlay" onclick="cerrarModalSiFondo(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <h3 id="modalTitle"><i class="fas fa-plus-circle" style="color:var(--blue-600);margin-right:7px;"></i>Registrar Nueva Acta</h3>
+            <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar"><i class="fas fa-times"></i></button>
         </div>
-
-        <div class="kpi-row">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-label">Empleo Formal</div>
-                <div class="kpi-value">52.4%</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +4.1pp</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-label">Contratado por Empresa de Práctica</div>
-                <div class="kpi-value">38.2%</div>
-                <div class="kpi-sub">31 de 82 egresados con práctica</div>
-            </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-label">Tiempo Prom. al Primer Empleo</div>
-                <div class="kpi-value">2.4 meses</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-down"></i> -0.6 meses vs anterior</div>
-            </div>
-            <div class="kpi-card kpi-orange">
-                <div class="kpi-label">NPS Supervisores (Empresas)</div>
-                <div class="kpi-value">+55</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +12 pts</div>
-            </div>
+        <div class="modal-body">
+            <form id="formActa" onsubmit="submitActa(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="actaFecha">Fecha *</label>
+                        <input type="date" id="actaFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="actaTipo">Tipo de reunión *</label>
+                        <select id="actaTipo" required>
+                            <option value="">— Seleccionar —</option>
+                            <option value="Coordinación">Coordinación</option>
+                            <option value="Revisión">Revisión</option>
+                            <option value="Seguimiento">Seguimiento</option>
+                            <option value="Emergente">Emergente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="actaAsistentes">Asistentes *</label>
+                    <input type="text" id="actaAsistentes" placeholder="Ej: Directora, Coordinador FC, Jefe UTP" required>
+                </div>
+                <div class="form-group">
+                    <label for="actaTemas">Temas tratados *</label>
+                    <textarea id="actaTemas" placeholder="Resumen de los temas abordados en la reunión..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="actaAcuerdos">Acuerdos / Compromisos *</label>
+                    <textarea id="actaAcuerdos" placeholder="Lista los acuerdos alcanzados y los compromisos asumidos..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="actaResponsable">Responsable *</label>
+                        <input type="text" id="actaResponsable" placeholder="Nombre del responsable" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="actaEstado">Estado</label>
+                        <select id="actaEstado">
+                            <option value="Abierta">Abierta</option>
+                            <option value="Cerrada">Cerrada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="actaUrl">URL Minuta completa <span style="font-weight:400;text-transform:none;color:var(--light)">(opcional)</span></label>
+                    <input type="url" id="actaUrl" placeholder="https://docs.google.com/document/d/...">
+                </div>
+            </form>
         </div>
-
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-title">Empleo formal vs informal</div>
-                <div class="chart-body"><canvas id="chart-ins-formalidad"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">% contratado por empresa de práctica</div>
-                <div class="chart-body"><canvas id="chart-ins-contratacion"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Tiempo al primer empleo (meses)</div>
-                <div class="chart-body"><canvas id="chart-ins-tiempo"></canvas></div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card wide">
-                <div class="chart-title">Satisfacción de empresas por dimensión (escala 1–5)</div>
-                <div class="chart-body"><canvas id="chart-ins-satisfaccion-emp"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Factores de selección para contratación (empresas)</div>
-                <div class="chart-body"><canvas id="chart-ins-factores"></canvas></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= PAGE: ANÁLISIS POR COHORTE ================= -->
-    <section class="page-content" id="page-cohorte">
-        <div class="page-section-title">
-            <h2>Análisis por Cohorte</h2>
-            <p>Comparativa de competencias técnicas, transversales y habilidades siglo XXI entre generaciones</p>
-        </div>
-
-        <div class="kpi-row">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-label">Cohortes Analizadas</div>
-                <div class="kpi-value">4</div>
-                <div class="kpi-sub">2022 — 2025</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-label">Mejor Cohorte (Inserción)</div>
-                <div class="kpi-value">2024</div>
-                <div class="kpi-sub">68.3% inserción laboral</div>
-            </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-label">Mayor Brecha Detectada</div>
-                <div class="kpi-value">Comp. Digitales</div>
-                <div class="kpi-sub">Mec. Automotriz vs Quím. Industrial</div>
-            </div>
-            <div class="kpi-card kpi-orange">
-                <div class="kpi-label">Habilidad Siglo XXI Mejor Evaluada</div>
-                <div class="kpi-value">Trabajo en Equipo</div>
-                <div class="kpi-sub">4.3 / 5.0 promedio</div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card wide">
-                <div class="chart-title">Competencias técnicas por cohorte — promedio (1–5)</div>
-                <div class="chart-body"><canvas id="chart-coh-tecnicas"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Competencias transversales — promedio por cohorte</div>
-                <div class="chart-body"><canvas id="chart-coh-transversales"></canvas></div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-title">Habilidades siglo XXI por generación</div>
-                <div class="chart-body"><canvas id="chart-coh-siglo21"></canvas></div>
-            </div>
-            <div class="chart-card wide">
-                <div class="chart-title">Brechas por especialidad (Mecánica vs Química) — cohorte 2024</div>
-                <div class="chart-body"><canvas id="chart-coh-brechas"></canvas></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= PAGE: DATOS DEMOGRÁFICOS Y EQUIDAD ================= -->
-    <section class="page-content" id="page-demograficos">
-        <div class="page-section-title">
-            <h2>Datos Demográficos y Equidad</h2>
-            <p>Distribución por género, especialidad, barreras reportadas y análisis de inclusión</p>
-        </div>
-
-        <div class="kpi-row">
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-label">Total Egresados Encuestados</div>
-                <div class="kpi-value">127</div>
-                <div class="kpi-sub">Cohortes 2022–2025</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-label">% Género Femenino</div>
-                <div class="kpi-value">28.3%</div>
-                <div class="kpi-delta positive"><i class="fas fa-caret-up"></i> +4.1pp vs 2023</div>
-            </div>
-            <div class="kpi-card kpi-purple">
-                <div class="kpi-label">Reportaron Barreras</div>
-                <div class="kpi-value">34.6%</div>
-                <div class="kpi-sub">44 egresados reportaron dificultades</div>
-            </div>
-            <div class="kpi-card kpi-orange">
-                <div class="kpi-label">Principal Barrera</div>
-                <div class="kpi-value">Económica</div>
-                <div class="kpi-sub">52% de quienes reportaron barreras</div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card">
-                <div class="chart-title">Distribución por género y especialidad</div>
-                <div class="chart-body"><canvas id="chart-demo-genero"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Rango etario de egresados</div>
-                <div class="chart-body"><canvas id="chart-demo-edad"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Barreras reportadas (sección Equidad)</div>
-                <div class="chart-body"><canvas id="chart-demo-barreras"></canvas></div>
-            </div>
-        </div>
-
-        <div class="charts-row">
-            <div class="chart-card wide">
-                <div class="chart-title">Grupos que reportaron dificultades — análisis de inclusión</div>
-                <div class="chart-body tall"><canvas id="chart-demo-inclusion"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Distribución por cohorte de egreso</div>
-                <div class="chart-body"><canvas id="chart-demo-cohorte"></canvas></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="looker-footer">
-        <span>Generado desde Looker Studio · Datos actualizados al 04/03/2026</span>
-        <span class="footer-powered">Powered by <strong>Google</strong></span>
-    </footer>
-
-    <!-- Loader overlay -->
-    <div id="loader" class="loader-overlay hidden">
-        <div class="loader-content">
-            <div class="spinner"></div>
-            <span>Cargando datos...</span>
+        <div class="modal-footer">
+            <button class="btn-cancel" type="button" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn-submit" id="btnSubmitActa" onclick="submitActa(event)">
+                <i class="fas fa-save"></i> Guardar Acta
+            </button>
         </div>
     </div>
+</div>
 
-    <script src="script.js"></script>
+<!-- ======== TOAST ======== -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIGURACIÓN DE LINKS
+//  Actualizar cada URL tras el despliegue de cada pieza.
+// ============================================================
+const LINKS = {
+    enc1_practica:  'https://docs.google.com/forms/d/e/1FAIpQLSf-6uhU_AReI8TIoXsjrP7y2nYVum_cbBM-aE7Lu9qCLZLSEg/viewform',
+    enc2_sin:       'https://docs.google.com/forms/d/e/1FAIpQLSeYgDeyzU183ypxKamsp19dgcWj7yg4tOOePton1gFMGW7_-g/viewform',
+    enc3_empresas:  'https://docs.google.com/forms/d/e/1FAIpQLSfa2pmyo95T9VaEZSL77vU2GSh_xHedgTPTORdJuMDhzzRUgw/viewform',
+    enc4_docentes:  'https://docs.google.com/forms/d/e/1FAIpQLSdVVbTRz7zI5UX_r4OT8g26hWbWblTgMmhq-vsJcrgKzFmkeA/viewform',
+    looker:         'https://datastudio.google.com/reporting/41978cc6-f2e2-46bb-be48-00c34ef9189a',
+    cualitativo:    'https://script.google.com/macros/s/AKfycbxxGOGB_YPP3CZuvgvU_NvNP1vxuZT6Wgj-wrf4vaUp_1QNG3kdaEfcin0dvMMP79ibZw/exec',
+    actas_sheets:   'https://docs.google.com/spreadsheets/d/1JIZSccMnRHwtDl1M_-Lf1TOwFA_Hmf4nbCPHAkGa3wY/edit?usp=sharing',
+};
+
+// Inyecta los hrefs configurables al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('actaFecha').value = today;
+
+    document.getElementById('btnVerSheets').href  = LINKS.actas_sheets  || '#';
+    document.getElementById('actasSheetsBtn').href = LINKS.actas_sheets || '#';
+
+    // Indicadores de estado según si el link está configurado
+    actualizarEstados();
+
+    // Modo GAS: cargar actas desde Sheets
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+        cargarActas();
+    } else {
+        // Modo estático: mostrar fallback
+        document.getElementById('actasTableWrapper').style.display = 'none';
+        document.getElementById('actasStaticFallback').classList.add('visible');
+    }
+});
+
+function actualizarEstados() {
+    const MAP = {
+        'st-enc1':       LINKS.enc1_practica,
+        'st-enc2':       LINKS.enc2_sin,
+        'st-enc3':       LINKS.enc3_empresas,
+        'st-enc4':       LINKS.enc4_docentes,
+        'st-looker':     LINKS.looker,
+        'st-cualitativo':LINKS.cualitativo,
+    };
+    Object.entries(MAP).forEach(([id, url]) => {
+        const el   = document.getElementById(id);
+        const dot  = el?.parentElement?.parentElement?.querySelector('.status-dot');
+        if (!el) return;
+        if (!url) {
+            el.textContent = 'Pendiente de deploy';
+            if (dot) { dot.classList.remove('dot-green'); dot.classList.add('dot-yellow'); }
+        }
+    });
+}
+
+function abrirLink(key) {
+    const url = LINKS[key];
+    if (!url) {
+        mostrarToast('Link pendiente de configurar');
+        return;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// ── ACTAS ──
+
+function cargarActas() {
+    google.script.run
+        .withSuccessHandler(renderActas)
+        .withFailureHandler(err => {
+            document.getElementById('actasEmpty').innerHTML =
+                '<i class="fas fa-exclamation-circle"></i><p>Error al cargar actas: ' + (err.message || err) + '</p>';
+        })
+        .getActasRecientes(10);
+}
+
+function renderActas(actas) {
+    const tbody = document.getElementById('actasBody');
+    if (!actas || actas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="actas-empty">
+            <i class="fas fa-file-alt"></i>
+            <p>No hay actas registradas aún. Usa el botón "Nueva Acta" para agregar la primera.</p>
+        </div></td></tr>`;
+        return;
+    }
+    tbody.innerHTML = actas.map(a => `
+        <tr>
+            <td>${formatFecha(a.fecha)}</td>
+            <td><span class="acta-tipo tipo-${a.tipo}">${a.tipo}</span></td>
+            <td style="max-width:280px;">${a.temas.length > 80 ? a.temas.substring(0,80) + '…' : a.temas}</td>
+            <td>${a.responsable}</td>
+            <td><span class="acta-estado estado-${a.estado}">${a.estado}</span></td>
+            <td>${a.url_minuta
+                ? `<a class="acta-doc-link" href="${a.url_minuta}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Ver</a>`
+                : '<span style="color:var(--light);font-size:.75rem;">—</span>'
+            }</td>
+        </tr>`
+    ).join('');
+}
+
+function formatFecha(raw) {
+    if (!raw) return '—';
+    const d = new Date(raw);
+    if (isNaN(d)) return raw;
+    return d.toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+// ── MODAL ──
+
+function abrirModal() {
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        // Modo estático: redirigir al Sheets
+        const url = LINKS.actas_sheets;
+        if (url) { window.open(url, '_blank', 'noopener,noreferrer'); }
+        else { mostrarToast('Disponible tras el deploy como Web App'); }
+        return;
+    }
+    document.getElementById('modalOverlay').classList.add('open');
+    document.getElementById('actaFecha').focus();
+}
+
+function cerrarModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.getElementById('formActa').reset();
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('actaFecha').value = today;
+}
+
+function cerrarModalSiFondo(e) {
+    if (e.target === document.getElementById('modalOverlay')) cerrarModal();
+}
+
+function submitActa(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitActa');
+
+    const data = {
+        fecha:       document.getElementById('actaFecha').value,
+        tipo:        document.getElementById('actaTipo').value,
+        asistentes:  document.getElementById('actaAsistentes').value.trim(),
+        temas:       document.getElementById('actaTemas').value.trim(),
+        acuerdos:    document.getElementById('actaAcuerdos').value.trim(),
+        responsable: document.getElementById('actaResponsable').value.trim(),
+        estado:      document.getElementById('actaEstado').value,
+        url_minuta:  document.getElementById('actaUrl').value.trim(),
+    };
+
+    if (!data.fecha || !data.tipo || !data.asistentes || !data.temas || !data.responsable) {
+        mostrarToast('Completa los campos obligatorios (*)');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+    google.script.run
+        .withSuccessHandler(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Guardar Acta';
+            cerrarModal();
+            mostrarToast('Acta guardada correctamente');
+            cargarActas();
+        })
+        .withFailureHandler(err => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Guardar Acta';
+            mostrarToast('Error al guardar: ' + (err.message || err));
+        })
+        .registrarActa(data);
+}
+
+// ── TOAST ──
+
+function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    setTimeout(() => t.classList.remove('visible'), 3000);
+}
+
+// Cerrar modal con Esc
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') cerrarModal();
+});
+</script>
 </body>
 </html>

@@ -59,24 +59,63 @@
 
 ---
 
-### 🌐 FASE 4 — Interfaz Web de Análisis Cualitativo (Semanas 5–6)
-**1 Abr – 14 Abr**
+### ✅ FASE 4 — Interfaz Web de Análisis Cualitativo (Semanas 5–6)
+**1 Abr – 14 Abr** · *Código completo — pendiente de deploy*
 
-**Tareas por Completar:**
-- Emplazar *Apps Script Web App* en Google.
-- Crear endpoints `doGet()` y funciones puente con API Html Service.
-- UI/UX HTML y CSS responsive, y motores de paginación JavaScript.
+**Archivos entregados en `Fase_4_Analisis_Cualitativo/`:**
+| Archivo | Contenido | Estado |
+|---|---|---|
+| `index.html` | Template HtmlService (`<?!= include() ?>`) con HTML completo | ✅ Listo |
+| `style.html` | CSS responsivo completo embebido en `<style>` | ✅ Listo |
+| `script.html` | Lógica JS cliente: filtros, tabla paginada, panel detalle, exportar CSV | ✅ Listo |
+| `Codigo.gs` | `doGet`, `include`, `getRespuestasAbiertas`, `exportarCSV` | ✅ Listo |
+
+**Pendiente de deploy (acción requerida):**
+1. Crear proyecto Apps Script (desde Sheets: `Extensiones > Apps Script`).
+2. Pegar `Codigo.gs` y los tres `.html` en el editor.
+3. Completar `SPREADSHEET_ID` en `Codigo.gs` con el ID del Sheets del proyecto.
+4. Ajustar los nombres de hoja (`hoja:`) y columnas (`col:`) en `SHEET_CONFIG` para que coincidan con los encabezados reales del Sheets.
+5. `Implementar > Nueva implementación > Aplicación web` — acceso al dominio de la organización.
+6. Copiar la URL resultante y pegarla en `LINKS.cualitativo` del Portal (Fase 5).
 
 **Entregable:** Portal Web analítico privado habilitado.
 
 ---
 
-### 🚀 FASE 5 — Landing Page y Actas de Revisión (Semana 6-7)
-**8 Abr – 14 Abr**
+### ✅ FASE 5 — Landing Page y Actas de Revisión (Semana 6–7)
+**8 Abr – 14 Abr** · *Código completo — pendiente de deploy y configuración de links*
 
-**Tareas por Completar:**
-- **Landing Page Centralizada:** Desarrollo del frontend del portal general que alojará los links a todas las demás herramientas ya hechas.
-- **Actas de Seguimiento:** Conformar estructura relacional estándar (Fecha, Participantes, Conclusión).
+**Archivos entregados en `Fase_5_Landing_Page/`:**
+| Archivo | Contenido | Estado |
+|---|---|---|
+| `index.html` | Portal Central completo (CSS embebido, auto-contenido; funciona estático y en GAS) | ✅ Listo |
+| `Codigo.gs` | `doGet`, `getActasRecientes`, `registrarActa` (crea hoja Actas automáticamente) | ✅ Listo |
+| `style.css` | Solo referencia — el CSS real está embebido en `index.html` | ✅ Listo |
+
+**Funcionalidades implementadas:**
+- Indicadores de estado del sistema (verde = link activo, amarillo = pendiente).
+- 4 cards de encuestas con acceso directo por audiencia.
+- 2 cards de herramientas (Looker Studio + Análisis Cualitativo).
+- Sistema de Actas: tabla dinámica en modo GAS, modal "Nueva Acta" con validación, fallback a link Sheets en modo estático.
+
+**Pendiente de deploy (acción requerida):**
+1. Crear proyecto Apps Script independiente (o añadir al mismo proyecto GAS del sistema).
+2. Pegar `Codigo.gs` e `index.html` en el editor.
+3. Completar `SPREADSHEET_ID` en `Codigo.gs`.
+4. `Implementar > Nueva implementación > Aplicación web`.
+5. **Configurar links** en el objeto `LINKS` dentro de `index.html` (bloque claramente marcado):
+
+```js
+const LINKS = {
+    enc1_practica:  '',   // ← URL Google Form Enc. 1
+    enc2_sin:       '',   // ← URL Google Form Enc. 2
+    enc3_empresas:  '',   // ← URL Google Form Enc. 3
+    enc4_docentes:  '',   // ← URL Google Form Enc. 4
+    looker:         '',   // ← URL Looker Studio (solo lectura)
+    cualitativo:    '',   // ← URL Web App Fase 4
+    actas_sheets:   '',   // ← URL Google Sheets del proyecto
+};
+```
 
 **Entregable:** Landing Page central funcionando junto con el libro logueador de Actas operante.
 
@@ -105,24 +144,40 @@
 
 ## 📦 Checklist de Entregables
 
+### Código / Artefactos
 - [x] Fase 1: Google Sheets con 7 hojas y estructura relacional listas (S1)
-- [x] Fase 2: Formulario 1: Egresados en Práctica — 12 secciones con lógica condicional (S2-S3)
-- [x] Fase 2: Formulario 2: Egresados sin Práctica — 7 secciones programadas (S2-S3)
-- [x] Fase 2: Formulario 3: Empresas Receptoras — 9 secciones lógicas (S2-S3)
-- [x] Fase 2: Formulario 4: Docentes EMTP — 11 secciones parametrizadas (S3)
-- [ ] Fase 3 [80%]: Dashboard Looker Studio — 5 páginas de reporte integradas (Funcional, falta mejorar diseños) 🔴 *Hito de Pago* (S3-S5)
-- [ ] Fase 4: Interfaz web corporativa de análisis cualitativo (S5-S6)
-- [ ] Fase 5: Landing Page centralizadora montada en Apps Script (S6-S7)
-- [ ] Fase 5: Espacio logueador de Actas de Revisión configurado (S6-S7)
-- [ ] Fase 6: Cierre, Documentación terminada, y Manual para usuarios (S7)
+- [x] Fase 2: Formulario 1 — Egresados en Práctica, 12 secciones con lógica condicional (S2-S3)
+- [x] Fase 2: Formulario 2 — Egresados sin Práctica, 7 secciones programadas (S2-S3)
+- [x] Fase 2: Formulario 3 — Empresas Receptoras, 9 secciones lógicas (S2-S3)
+- [x] Fase 2: Formulario 4 — Docentes EMTP, 11 secciones parametrizadas (S3)
+- [x] Fase 4: Código completo de la Web App de análisis cualitativo (`index.html`, `style.html`, `script.html`, `Codigo.gs`)
+- [x] Fase 5: Código completo del Portal Central + Sistema de Actas (`index.html`, `Codigo.gs`)
+
+### Deploy / Integración en producción
+- [ ] Fase 3 [80%]: Dashboard Looker Studio — 5 páginas integradas y diseño finalizado 🔴 *Hito de Pago 1*
+- [x] Fase 4: Deploy de la Web App cualitativa en Google Apps Script — `https://script.google.com/macros/s/AKfycbxxGOGB_YPP3CZuvgvU_NvNP1vxuZT6Wgj-wrf4vaUp_1QNG3kdaEfcin0dvMMP79ibZw/exec`
+- [x] Fase 4: Corrección de nombres de hojas y columnas en `SHEET_CONFIG` — dashboard carga respuestas correctamente
+- [x] Fase 5: Deploy del Portal Central como Web App — `https://script.google.com/macros/s/AKfycbyhDsEsAJgt0tmpdS9PXK2YcUlCFFK8Brh8ZOKBxl7BGzqaj2cqSI2aJn17B_hCLS1D/exec`
+- [x] Fase 5: Configurar el objeto `LINKS` en `index.html` con todas las URLs de producción
+- [x] Fase 5: Verificar que la hoja `Actas` se crea correctamente al primer uso ✅
+- [x] Fase 5: Corrección de icono `fa-wpforms` → `fa-clipboard-list` en Portal Central
+
+### Cierre
+- [ ] Fase 6: Documentación de manual de uso corporativo terminada
+- [ ] Fase 6: Grabación de video-tutorial de inducción
+- [ ] Fase 6: Ceremonia de cierre y transferencia de propiedad
 
 ---
 
 ## ⚠️ Puntos Pendientes del Proyecto
 
-| Item de Trabajo | Detalle del Pendiente | Responsable Asignado |
+| Item | Detalle | Responsable |
 |---|---|---|
-| **Estandarización de Competencias Técnicas** | Es mandatorio que completen en la hoja de control `Catalogo_Competencias` las competencias reales aplicables a la matriz de las variantes *Mecánica Automotriz* y *Química Industrial*. Todo el código que se implementará condicionalmente las requiere cargadas primero. | Coordinador Fundación Chile |
+| **Catálogo de Competencias Técnicas** | Poblar `Catalogo_Competencias` con las competencias reales de *Mecánica Automotriz* y *Química Industrial*. Bloqueante para la Sección D de Enc. 1 y Sección C de Enc. 3. | Coordinador Fundación Chile |
+| ~~**Deploy Fase 4**~~ | ✅ Deployado — Web App activa. | ~~Desarrollador~~ |
+| ~~**Deploy Fase 5**~~ | ✅ Deployado — Portal Central activo. | ~~Desarrollador~~ |
+| ~~**Links de producción**~~ | ✅ Todos los 7 links configurados en `LINKS` (4 Forms + Looker + Cualitativo + Sheets). | ~~Desarrollador~~ |
+| **Diseño final Looker Studio** | Pulir maquetación de las 5 páginas del dashboard (Hito de Pago 1 bloqueado hasta aquí). | Desarrollador |
 
 ---
 

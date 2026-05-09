@@ -1,0 +1,55 @@
+Enlace para ver el resumen y la transcripción de la reunión: https://www.notion.so/3514fddab9a780bca0f0e1e36aa5af1c?pvs=189#3514fddab9a7802da070c89dfed54dc8 
+
+---
+
+Resumen:
+
+### Elementos de Acción
+
+- [ ]  Corregir el salto condicional en la encuesta de estudiantes en práctica para que los estudiantes de mecánica no pasen por las preguntas de química
+- [ ]  Mover la pregunta "¿qué estudias?, ¿de qué carrera?, ¿de qué especialidad?" para que aparezca más arriba en la encuesta de estudiantes en práctica
+- [ ]  Agregar validación en el campo de edad para que solo se puedan ingresar números
+- [ ]  Evaluar viabilidad de agregar pregunta o campo sobre dónde están estudiando los estudiantes actualmente
+- [ ]  Preparar diccionario de variables explicando cómo se calculan los indicadores (tasa de inserción laboral, NPS, empleo formal/informal, etc.)
+- [ ]  Revisar consistencia entre gráficos y datos mostrados, especialmente en empleo formal/informal
+- [ ]  Vanessa debe enviar la solicitud de boleta
+- [ ]  Crear documentación final una vez completadas todas las correcciones
+
+### Errores Identificados
+
+- **Problema con salto condicional**: Los estudiantes de mecánica en la encuesta de práctica están siendo dirigidos a las preguntas de competencias de química, además de las de mecánica  . Los estudiantes de química saltan correctamente y solo ven sus preguntas correspondientes
+- **Posible intervención de IA**: Se detectó que algunas encuestas tenían campos de respuesta diferentes a los trabajados originalmente, posiblemente debido a reinterpretación por IA
+
+### Mejoras de Usabilidad Solicitadas
+
+- **Orden de preguntas**: La pregunta sobre especialidad/carrera del estudiante aparece muy abajo en el formulario, causando confusión al completar la encuesta   . Se solicita moverla al inicio para identificar el tipo de estudiante antes de responder otras preguntas
+- **Campo abierto para actividad actual**: Se sugiere agregar una pregunta abierta sobre qué está haciendo actualmente el estudiante, ya que las opciones actuales no cubren todos los casos (ej: sigue estudiando pero no tiene trabajo)
+- **Navegación**: No hay botón de regreso en las vistas cualitativas - se abrirá en ventana aparte para facilitar navegación
+
+### Documentación Requerida
+
+- Se necesita diccionario de variables que explique cómo se calculan los indicadores como tasa de inserción laboral, NPS de satisfacción, empleo formal vs informal, etc.
+- La documentación completa se creará al final una vez hechas todas las correcciones para tener versión final
+- Se requieren explicaciones operativas para la presentación del 12 de mayo
+
+### Funcionalidades Confirmadas
+
+- Sistema de acceso: Para editar encuestas se requiere login con la cuenta autorizada, luego aparece botón de editar
+- Acceso a base de datos: Disponible desde "ver sheets" al final, cerca de las actas
+- Creación de actas: Se pueden crear actas que generan formularios guardados en la misma base de datos
+- Links compartibles: Las encuestas generan links que se pueden compartir para que otros las completen
+
+### Plazos y Próximos Pasos
+
+- **12 de mayo**: Presentación oficial y entrega del proyecto a terceros
+- **Revisión actual**: Héctor está revisando todas las configuraciones y probando botones para detectar ajustes menores
+- **Esta semana**: Se esperan resolver correcciones mínimas en los próximos días
+- **Próxima semana**: Revisión final de cambios implementados
+
+### Comentarios Generales
+
+- Héctor felicitó el trabajo realizado y destacó el desafío de crear todo en versión gratuita
+- Se valoró especialmente la capacidad del equipo de cuestionar, ofrecer alternativas y agregar valor más allá de solo cumplir órdenes
+- La presentación será ante representantes de SLEP, COREMU, MINEDUC, alcaldes, y la minera (principal interesado en datos)
+- Se sugirió incluir datos de contacto del equipo desarrollador en el sistema para futuras oportunidades
+- Se mencionó precaución con el uso de IA para generar contenido, ya que puede reinterpretar información incorrectamente
